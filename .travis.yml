@@ -1,0 +1,24 @@
+sudo: required
+dist: trusty
+language: node_js
+node_js:
+  - "8"
+cache:
+  directories: node_modules
+
+# Install Chromium
+# https://github.com/travis-ci/travis-ci/issues/272#issuecomment-283968954
+before_install:
+  - sudo apt-get update
+  - sudo apt-get install chromium-chromedriver
+before_script:
+  - "export PATH=$PATH:/usr/lib/chromium-browser/"
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
+  - sleep 3 # give xvfb some time to start
+
+script:
+  - npm run lint
+  - npm test
+  - npm run build
+  - node index.js

@@ -1,0 +1,40 @@
+{
+  "env": {
+    "production": {
+      "plugins": [
+        "transform-react-remove-prop-types",
+      ],
+    }
+  },
+  "ignore": [
+    "**/node_modules/*",
+  ],
+  "plugins": [
+    "lodash",
+    "syntax-object-rest-spread",
+    "transform-class-properties",
+    ["transform-imports", {
+      "lodash": {
+        "transform": "lodash/${member}",
+        "preventFullImport": true
+      },
+      "react-bootstrap": {
+        "transform": "react-bootstrap/lib/${member}",
+        "preventFullImport": true
+      },
+      "react-router-dom": {
+        "transform": "react-router-dom/${member}",
+        "preventFullImport": true
+      }
+    }]
+  ],
+  "presets": [
+    ["env", {
+      "targets": {
+        "browsers": ["last 2 versions"],
+        "node": "current",
+      }
+    }],
+    "react"
+  ],
+}
