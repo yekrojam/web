@@ -2,6 +2,8 @@ import React from 'react';
 import {Link, withRouter} from 'react-router-dom';
 
 import Page from '../../components/Page/Page';
+import PageHeader from '../../components/Page/PageHeader';
+
 import {HOME_PATH} from '../../constants/app';
 
 /**
@@ -12,7 +14,7 @@ import {HOME_PATH} from '../../constants/app';
 const NotFoundController = ({history}) => {
   return (
     <Page className="not-found" title="Page Not Found">
-      <h1>Page not found.</h1>
+      <PageHeader title="Page not found." />
       <p>
         The link you followed may be broken or the page may have been removed.
       </p>

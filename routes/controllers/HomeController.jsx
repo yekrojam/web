@@ -7,6 +7,7 @@ import {Link} from 'react-router-dom';
 
 import Loader from '../../components/Loader/Loader';
 import Page from '../../components/Page/Page';
+import PageHeader from '../../components/Page/PageHeader';
 
 import {fetchUsers} from '../../actions';
 import ActionTypes from '../../constants/ActionTypes';
@@ -56,9 +57,11 @@ class HomeController extends React.Component {
   }
 
   render() {
+    const title = 'Members';
+
     return (
-      <Page className="directory" title="Members">
-        <h2>Members</h2>
+      <Page className="directory" title={title}>
+        <PageHeader title={title} />
         {this._renderContents()}
       </Page>
     );
