@@ -35,3 +35,11 @@ The testing suite uses Karma, Mocha, Chai, and Enzyme. To test:
 ```
 $ yarn test
 ```
+
+## Todos
+An incomplete list:
+- [ ] Logging
+- [ ] Connect to CI service
+- [ ] Better error handling
+- [ ] Fix React testing errors
+- [ ] Hot module reloading on server
