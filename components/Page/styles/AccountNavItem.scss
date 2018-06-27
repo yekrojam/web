@@ -1,0 +1,51 @@
+$photo-size: 32px;
+
+.account-nav-item {
+  .arrow,
+  .arrow:after {
+    border: 9px solid transparent;
+    position: absolute;
+  }
+
+  .arrow {
+    border-bottom-color: rgba(0, 0, 0, 0.15);
+    border-top-width: 0;
+    left: initial;
+    margin-left: 0;
+    right: 20px;
+    top: -10px;
+  }
+
+  .arrow:after {
+    border-bottom-color: #fff;
+    border-width: 0 10px 10px;
+    content: " ";
+    margin-left: -10px;
+    top: 1px;
+  }
+
+  .app-header & > .dropdown-menu {
+    border-radius: 3px;
+    margin-top: 4px;
+  }
+
+  &.open > a.dropdown-toggle {
+    &,
+    &:active,
+    &:focus,
+    &:hover {
+      background-color: transparent;
+    }
+  }
+
+  &-photo {
+    background-position: 50% 50%;
+    background-size: $photo-size;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50px;
+    display: inline-block;
+    height: $photo-size;
+    margin: -11px 0;
+    width: $photo-size;
+  }
+}

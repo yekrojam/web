@@ -2,9 +2,7 @@ $border-color: rgba(0, 0, 0, 0.05);
 
 .app {
   &-page {
-    padding-top: 80px;
-
-    h2, h3 {
+    h1, h2, h3 {
       margin-top: 0;
     }
   }
@@ -22,6 +20,11 @@ $border-color: rgba(0, 0, 0, 0.05);
         color: #000;
       }
     }
+  }
+
+  &-content {
+    padding-top: 71px;
+    padding-bottom: 20px;
   }
 
   &-footer {
