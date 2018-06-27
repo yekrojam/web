@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {Col, Media, Panel, Row} from 'react-bootstrap';
 import {connect} from 'react-redux';
+import {Link} from 'react-router-dom';
 
 import Loader from '../../components/Loader/Loader';
 import Page from '../../components/Page/Page';
@@ -26,7 +27,9 @@ const MemberCard = ({user}) => {
           </Media.Left>
           <Media.Body>
             <Media.Heading>
-              <a href={`/users/${user.id}`}>{name}</a>
+              <Link to={{pathname: `/users/${user.id}`}}>
+                {name}
+              </Link>
             </Media.Heading>
             <ul style={{listStyle: 'none', paddingLeft: '0'}}>
               {details.map(({data, label}) => (
