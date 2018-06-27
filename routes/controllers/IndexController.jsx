@@ -12,7 +12,7 @@ import {APP_NAME} from '../../constants/app';
 class IndexController extends React.Component {
   render() {
     return (
-      <BasePage className="login" title="Welcome">
+      <BasePage className="index" title="Welcome">
         <div className="jumbotron">
           <div className="container">
             <h1>{APP_NAME}</h1>
