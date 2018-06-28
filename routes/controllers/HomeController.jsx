@@ -1,7 +1,7 @@
 import {isEmpty} from 'lodash';
 import PropTypes from 'prop-types';
 import React from 'react';
-import {Col, Media, Panel, Row} from 'react-bootstrap';
+import {Col, FormControl, Media, Panel, Row} from 'react-bootstrap';
 import {connect} from 'react-redux';
 import {Link} from 'react-router-dom';
 
@@ -12,8 +12,11 @@ import PageHeader from '../../components/Page/PageHeader';
 import {fetchUsers} from '../../actions';
 import ActionTypes from '../../constants/ActionTypes';
 
+const getName = ({name}) => `${name.first} ${name.last}`;
+
 const MemberCard = ({user}) => {
-  const name = `${user.name.first} ${user.name.last}`;
+  const name = getName(user);
+
   const details = [
     {data: user.email, label: 'Email'},
     {data: user.phone, label: 'Phone'},
@@ -52,6 +55,10 @@ const MemberCard = ({user}) => {
  * The logged-in homepage for the app.
  */
 class HomeController extends React.Component {
+  state = {
+    filter: '',
+  }
+
   componentWillMount() {
     this.props.fetchUsers();
   }
@@ -61,7 +68,12 @@ class HomeController extends React.Component {
 
     return (
       <Page className="directory" title={title}>
-        <PageHeader title={title} />
+        <PageHeader title={title}>
+          <FormControl
+            onChange={this._handleFilter}
+            placeholder="Filter by name..."
+          />
+        </PageHeader>
         {this._renderContents()}
       </Page>
     );
@@ -76,13 +88,17 @@ class HomeController extends React.Component {
 
     return (
       <Row>
-        {users.map((user) => (
+        {users.filter((user) => getName(user).indexOf(this.state.filter) !== -1).map((user) => (
           <Col key={user.id} lg={4} sm={6} xs={12}>
             <MemberCard user={user} />
           </Col>
         ))}
       </Row>
     );
+  }
+
+  _handleFilter = (e) => {
+    this.setState({filter: e.target.value});
   }
 }
 
