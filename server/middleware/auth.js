@@ -76,8 +76,7 @@ function deserializeUser(id, next) {
     .then(res => res.json())
     .then((data) => {
       const user = find(data.results, u => u.login.uuid === id);
-      user.id = id;
-      next(null, user);
+      next(null, {...user, id});
     })
     .catch((error) => {
       next(error);

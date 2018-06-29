@@ -1,4 +1,6 @@
-const webpackConfig = require('./webpack.config');
+const webpackConfig = require('./webpack.config')(null, {
+  mode: 'development',
+});
 
 module.exports = (config) => {
   config.set({
@@ -21,7 +23,6 @@ module.exports = (config) => {
     singleRun: true,
     webpack: Object.assign(webpackConfig, {
       devtool: 'inline-source-map',
-      mode: 'development',
     }),
     webpackMiddleware: {
       stats: 'errors-only',
