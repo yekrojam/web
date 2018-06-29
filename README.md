@@ -1,5 +1,7 @@
 # Web
 
+[![build status](https://img.shields.io/travis/yekrojam/web/master.svg?style=flat-square)](https://travis-ci.org/yekrojam/web)
+
 ## Installation
 
 Clone the repo:
