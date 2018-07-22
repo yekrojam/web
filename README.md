@@ -41,7 +41,8 @@ $ yarn test
 ## Todos
 An incomplete list:
 - [ ] Logging
-- [ ] Connect to CI service
 - [ ] Better error handling
-- [ ] Fix React testing errors
+- [ ] Code-splitting
 - [ ] Hot module reloading on server
+- [x] Connect to CI service (TravisCI)
+- [x] Fix React testing errors
