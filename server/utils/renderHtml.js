@@ -1,9 +1,10 @@
+/* eslint-disable import/no-unresolved */
 import webpackManifest from '../../public/build/webpack-manifest.json';
+/* eslint-enable import/no-unresolved */
 
 import { APP_NAME } from '../../constants/app';
 
-// TODO: Add code-splitting.
-const chunkManifest = {};
+const chunkManifest = {}; // TODO: Add code-splitting.
 
 /* eslint-disable max-len */
 export default (children, data) => `
