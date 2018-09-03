@@ -15,10 +15,7 @@ const userReducer = (state = {}, action) => {
 export default (state = [], action) => {
   switch (action.type) {
     case getSuccessType(ActionTypes.USERS_FETCH):
-      return action.data.results.map(user => ({
-        ...user,
-        id: user.login.uuid,
-      }));
+      return action.data;
     case getSuccessType(ActionTypes.USER_FETCH):
       return state.map(user => userReducer(user, action));
     default:

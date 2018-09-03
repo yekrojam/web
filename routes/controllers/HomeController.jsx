@@ -11,11 +11,10 @@ import PageHeader from '../../components/Page/PageHeader';
 
 import {fetchUsers} from '../../actions';
 import ActionTypes from '../../constants/ActionTypes';
-
-const getName = ({name}) => `${name.first} ${name.last}`;
+import getUserName from '../../utils/getUserName';
 
 const MemberCard = ({user}) => {
-  const name = getName(user);
+  const name = getUserName(user);
 
   const details = [
     {data: user.email, label: 'Email'},
@@ -27,20 +26,26 @@ const MemberCard = ({user}) => {
       <Panel.Body>
         <Media>
           <Media.Left>
-            <img alt={name} src={user.picture.thumbnail} />
+            <img alt={name} src={user.imageURL} height={100} width={100} />
           </Media.Left>
           <Media.Body>
             <Media.Heading>
-              <Link to={{pathname: `/users/${user.id}`}}>
+              <Link to={{pathname: `/users/${user._id}`}}>
                 {name}
               </Link>
             </Media.Heading>
             <ul style={{listStyle: 'none', paddingLeft: '0'}}>
-              {details.map(({data, label}) => (
-                <li key={data}>
-                  <strong>{label}:</strong> {data}
-                </li>
-              ))}
+              {details.map(({data, label}) => {
+                if (!data) {
+                  return null;
+                }
+
+                return (
+                  <li key={data}>
+                    <strong>{label}:</strong> {data}
+                  </li>
+                );
+              })}
             </ul>
           </Media.Body>
         </Media>
@@ -88,11 +93,14 @@ class HomeController extends React.Component {
 
     return (
       <Row>
-        {users.filter((user) => getName(user).indexOf(this.state.filter) !== -1).map((user) => (
-          <Col key={user.id} lg={4} sm={6} xs={12}>
-            <MemberCard user={user} />
-          </Col>
-        ))}
+        {users
+          .filter((user) => getUserName(user).indexOf(this.state.filter) !== -1)
+          .map((user) => (
+            <Col key={user._id} lg={4} sm={6} xs={12}>
+              <MemberCard user={user} />
+            </Col>
+          ))
+        }
       </Row>
     );
   }

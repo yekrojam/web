@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const ManifestPlugin = require('webpack-manifest-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
@@ -5,6 +7,8 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 const path = require('path');
 const webpack = require('webpack');
+
+const { API_URL, NODE_ENV } = process.env;
 
 module.exports = (env, argv) => {
   const PROD = argv.mode === 'production';
@@ -107,6 +111,12 @@ module.exports = (env, argv) => {
       publicPath: '/build/',
     },
     plugins: [
+      new webpack.DefinePlugin({
+        'process.env': {
+          API_URL: JSON.stringify(API_URL),
+          NODE_ENV: JSON.stringify(NODE_ENV),
+        },
+      }),
       // Don't pull in all of Moment's locales
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
       new ManifestPlugin({

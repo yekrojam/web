@@ -10,14 +10,7 @@ import Page from '../../components/Page/Page';
 import {fetchUser} from '../../actions';
 
 import ActionTypes from '../../constants/ActionTypes';
-
-function getUserName(user) {
-  if (!user) {
-    return '';
-  }
-
-  return `${user.name.first} ${user.name.last}`;
-}
+import getUserName from '../../utils/getUserName';
 
 /**
  * ProfileController
@@ -51,23 +44,41 @@ class ProfileController extends React.Component {
       return <Loader />;
     }
 
-    const joined = moment(user.registered.date).format('MMMM YYYY');
-    const location = `${user.location.city}, ${user.location.state}`;
+    const {birthDate, birthMonth, birthYear, createdAt, email, phone} = user;
     const name = getUserName(user);
 
     const details = [
-      {data: joined, label: 'Joined'},
-      {data: location, label: 'Location'},
-      {data: user.email, label: 'Email'},
-      {data: user.phone, label: 'Phone'},
-      {data: moment(user.dob.date).format('MMMM, Do YYYY'), label: 'Birthday'},
+      {data: moment(createdAt).format('MMMM YYYY'), label: 'Joined'},
+      {data: email, label: 'Email'},
     ];
+
+    if (phone) {
+      details.push({
+        data: phone,
+        label: 'Phone',
+      });
+    }
+
+    if (birthYear && birthMonth && birthDate) {
+      const data = moment()
+        .set({
+          year: birthYear,
+          month: birthMonth,
+          day: birthDate
+        })
+        .format('MMMM, Do YYYY');
+
+      details.push({
+        data,
+        label: 'Birthday',
+      });
+    }
 
     return (
       <div>
         <Media>
           <Media.Left>
-            <img alt={name} src={user.picture.large} />
+            <img alt={name} src={user.imageURL} height={150} width={150} />
           </Media.Left>
           <Media.Body>
             <h2>{name}</h2>
@@ -91,7 +102,7 @@ ProfileController.propTypes = {
 
 const mapStateToProps = ({pendingRequests, users}, {match: {params}}) => ({
   pendingRequests,
-  user: find(users, (user) => user.id === params.userId),
+  user: find(users, (user) => user._id === params.userId),
 });
 
 const mapDispatchToProps = (dispatch) => ({

@@ -15,7 +15,7 @@ export const fetchUsers = () => (dispatch, getState) => {
 
   dispatch({ type });
 
-  fetch('https://randomuser.me/api?format=pretty&seed=majorkey&results=50')
+  fetch(`${process.env.API_URL}/user`)
     .then(res => res.json())
     .then((data) => {
       dispatch({

@@ -23,7 +23,7 @@ const AccountNavItem = ({user}) => {
         <div
           className="account-nav-item-photo"
           style={{
-            backgroundImage: `url(${user.picture.thumbnail})`,
+            backgroundImage: `url(${user.imageURL})`,
           }}
         />
       }>
@@ -44,7 +44,7 @@ const AccountNavItem = ({user}) => {
 AccountNavItem.propTypes = {
   user: PropTypes.shape({
     id: PropTypes.string.isRequired,
-    picture: PropTypes.object.isRequired,
+    imageURL: PropTypes.string.isRequired,
   }).isRequired,
 };
 

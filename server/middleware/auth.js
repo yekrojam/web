@@ -1,8 +1,9 @@
-import { find } from 'lodash';
 import passport from 'passport';
 import Auth0Strategy from 'passport-auth0';
 
 import { AUTH_PATH, HOME_PATH } from '../../constants/app';
+
+const { API_URL } = process.env;
 
 export function redirectIfAuthenticated(req, res, next) {
   if (!req.isAuthenticated()) {
@@ -36,51 +37,64 @@ const authConfig = {
 
 /**
  * Response from Auth0:
- *  - `accessToken` is the token to call Auth0 API (not needed in the most cases)
+ *  - `accessToken` is the token to call Auth0 API (not needed in most cases)
  *  - `extraParams.id_token` has the JSON Web Token
  *  - `profile` has all the information from the user
  */
-function onVerify(accessToken, refreshToken, extraParams, profile, next) {
+async function onVerify(accessToken, refreshToken, extraParams, profile, next) {
   if (!(profile && profile.id)) {
     // We didn't get a valid response back from Auth0.
     throw Error('Auth: Invalid profile.');
   }
 
-  // Auth0 ids come back in the form of 'type|id', eg:
-  //  - Username/Password: 'auth0|5b3298307ddc051b6f8f7686'
-  //  - Github: 'github|123456'
-  // const [type, id] = profile.id.split('|');
+  const {
+    email,
+    name,
+    nickname,
+    picture,
+    updated_at, /* eslint-disable-line camelcase */
+  } = profile._json; /* eslint-disable-line no-underscore-dangle */
 
-  // TODO: Log the user into the app:
-  //  - Create the user if they don't already exist.
-  //  - Retrieve the user's info if they do.
+  const data = {
+    // Auth0 ids come back in the form of 'type|id', eg:
+    //  - Username/Password: 'auth0|5b3298307ddc051b6f8f7686'
+    //  - Github: 'github|123456'
+    auth: profile.id,
+    email,
+    imageURL: picture,
+    name: name === email ? nickname : name,
+    updatedAt: updated_at,
+  };
 
-  // Questions:
-  //  - Do we allow different connections (eg: username/pw, Github, etc.)?
-  //  - If so, how do we match a user logging in under different account?
-  //    Note (eric): My guess is we match across accounts using email address,
-  //    meaning that needs to be unique.
-  // next(null, { id, type });
+  try {
+    const res = await fetch(`${API_URL}/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+      },
+      body: JSON.stringify(data),
+    });
 
-  // TEMPORARY: Hard-code a test user's id.
-  next(null, { id: '4c7f2dbe-489f-4b8b-a7a5-e9b0de4a586e' });
+    const user = await res.json();
+
+    next(null, user);
+  } catch (error) {
+    next(error);
+  }
 }
 
 function serializeUser(user, next) {
   next(null, user.id);
 }
 
-function deserializeUser(id, next) {
-  // TODO: Fetch the user's info using the API.
-  fetch('https://randomuser.me/api?format=pretty&seed=majorkey&results=50')
-    .then(res => res.json())
-    .then((data) => {
-      const user = find(data.results, u => u.login.uuid === id);
-      next(null, { ...user, id });
-    })
-    .catch((error) => {
-      next(error);
-    });
+async function deserializeUser(id, next) {
+  try {
+    const res = await fetch(`${API_URL}/user/${id}`);
+    const user = await res.json();
+    next(null, user);
+  } catch (error) {
+    next(error);
+  }
 }
 
 passport.use(new Auth0Strategy(authConfig, onVerify));

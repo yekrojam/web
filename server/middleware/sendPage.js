@@ -18,10 +18,13 @@ export default (req, res, next) => {
     const history = createMemoryHistory({ initialEntries: [req.url] });
     const store = createStore(history, {/* Initial state */});
 
+    const user = req.session.user || {};
+    user.id = user._id; /* eslint-disable-line no-underscore-dangle */
+
     // Add session data to the store.
     store.dispatch(initializeSession({
       authToken: req.session.authToken || '',
-      user: req.session.user || {},
+      user,
     }));
 
     const dom = renderToString(
