@@ -18,7 +18,7 @@ import getUserName from '../../utils/getUserName';
  * A generic profile page for a user, depending on the URL's id param.
  */
 class ProfileController extends React.Component {
-  componentWillMount() {
+  componentDidMount() {
     this.props.fetchUser(this.props.match.params.userId);
   }
 

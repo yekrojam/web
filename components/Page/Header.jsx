@@ -11,35 +11,33 @@ import {APP_NAME, AUTH_PATH, HOME_PATH} from '../../constants/app';
 /**
  * Header
  */
-class Header extends React.Component {
-  render() {
-    const {session: {user}} = this.props;
+const Header = (props) => {
+  const {session: {user}} = props;
 
-    const navItems = !!(user && user.id) ?
-      <AccountNavItem user={user} /> :
-      <NavItem href={AUTH_PATH}>
-        Sign In
-      </NavItem>;
+  const navItems = !!(user && user.id) ?
+    <AccountNavItem user={user} /> :
+    <NavItem href={AUTH_PATH}>
+      Sign In
+    </NavItem>;
 
-    return (
-      <Navbar className="app-header" fixedTop>
-        <Navbar.Header>
-          <Navbar.Brand>
-            <Link to={{pathname: HOME_PATH}}>
-              {APP_NAME}
-            </Link>
-          </Navbar.Brand>
-          <Navbar.Toggle />
-        </Navbar.Header>
-        <Navbar.Collapse>
-          <Nav pullRight>
-            {navItems}
-          </Nav>
-        </Navbar.Collapse>
-      </Navbar>
-    );
-  }
-}
+  return (
+    <Navbar className="app-header" fixedTop>
+      <Navbar.Header>
+        <Navbar.Brand>
+          <Link to={{pathname: HOME_PATH}}>
+            {APP_NAME}
+          </Link>
+        </Navbar.Brand>
+        <Navbar.Toggle />
+      </Navbar.Header>
+      <Navbar.Collapse>
+        <Nav pullRight>
+          {navItems}
+        </Nav>
+      </Navbar.Collapse>
+    </Navbar>
+  );
+};
 
 const mapStateToProps = ({session}) => ({
   session,

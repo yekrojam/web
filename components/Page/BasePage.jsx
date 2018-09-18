@@ -3,15 +3,9 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import {APP_NAME} from '../../constants/app';
-import isBrowser from '../../utils/isBrowser';
 
 const setTitle = (title) => {
-  if (!isBrowser()) {
-    return;
-  }
-
-  const prefix = APP_NAME;
-  document.title = title ? `${prefix} \u00b7 ${title}` : prefix;
+  document.title = title ? `${APP_NAME} \u00b7 ${title}` : APP_NAME;
 };
 
 /**
@@ -21,15 +15,15 @@ const setTitle = (title) => {
  * every page.
  */
 class BasePage extends React.Component {
-  componentWillMount() {
+  componentDidMount() {
     // Set the browser page title.
     setTitle(this.props.title);
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentDidUpdate(prevProps) {
     // Update the browser page title on transitions.
-    if (this.props.title !== nextProps.title) {
-      setTitle(nextProps.title);
+    if (this.props.title !== prevProps.title) {
+      setTitle(this.props.title);
     }
   }
 

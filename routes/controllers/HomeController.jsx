@@ -64,7 +64,7 @@ class HomeController extends React.Component {
     filter: '',
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.fetchUsers();
   }
 
