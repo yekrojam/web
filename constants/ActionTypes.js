@@ -3,7 +3,12 @@ import { getErrorType, getSuccessType } from '../utils/actionTypes';
 // Add base types here.
 const TYPES = [
   'SESSION_INITIALIZE',
+
+  'USER_CREATE',
+  'USER_DELETE',
   'USER_FETCH',
+  'USER_UPDATE',
+
   'USERS_FETCH',
 ];
 
