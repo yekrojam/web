@@ -31,6 +31,7 @@
     "isomorphic-fetch": "^2.2.1",
     "jsonwebtoken": "^8.2.2",
     "lodash": "^4.17.10",
+    "md5": "^2.2.1",
     "moment": "^2.22.2",
     "moment-timezone": "^0.5.17",
     "morgan": "^1.9.0",
@@ -88,6 +89,6 @@
     "webpack-manifest-plugin": "^2.0.3"
   },
   "engines": {
-    "node": "8.9.0"
+    "node": "^8.9.0"
   }
 }

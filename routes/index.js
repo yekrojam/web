@@ -1,3 +1,4 @@
+import Admin from './controllers/AdminController';
 import Home from './controllers/HomeController';
 import Index from './controllers/IndexController';
 import NotFound from './controllers/NotFoundController';
@@ -19,6 +20,10 @@ export default [
   {
     path: '/users/:userId',
     component: Profile,
+  },
+  {
+    path: '/admin',
+    component: Admin,
   },
   {
     path: '*',
