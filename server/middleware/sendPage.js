@@ -19,7 +19,6 @@ export default (req, res, next) => {
     const store = createStore(history, {/* Initial state */});
 
     const user = req.session.user || {};
-    user.id = user._id; /* eslint-disable-line no-underscore-dangle */
 
     // Add session data to the store.
     store.dispatch(initializeSession({

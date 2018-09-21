@@ -30,7 +30,7 @@ const MemberCard = ({user}) => {
           </Media.Left>
           <Media.Body>
             <Media.Heading>
-              <Link to={{pathname: `/users/${user._id}`}}>
+              <Link to={{pathname: `/users/${user.id}`}}>
                 {name}
               </Link>
             </Media.Heading>
@@ -96,7 +96,7 @@ class HomeController extends React.Component {
         {users
           .filter((user) => getUserName(user).indexOf(this.state.filter) !== -1)
           .map((user) => (
-            <Col key={user._id} lg={4} sm={6} xs={12}>
+            <Col key={user.id} lg={4} sm={6} xs={12}>
               <MemberCard user={user} />
             </Col>
           ))

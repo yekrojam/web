@@ -102,7 +102,7 @@ ProfileController.propTypes = {
 
 const mapStateToProps = ({pendingRequests, users}, {match: {params}}) => ({
   pendingRequests,
-  user: find(users, (user) => user._id === params.userId),
+  user: find(users, (user) => user.id === params.userId),
 });
 
 const mapDispatchToProps = (dispatch) => ({
