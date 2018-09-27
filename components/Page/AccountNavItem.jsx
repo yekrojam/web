@@ -1,7 +1,8 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import { MenuItem, NavDropdown } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
+
+import { UserType } from '../../constants/propTypes';
 
 import './styles/AccountNavItem.scss';
 
@@ -36,10 +37,7 @@ const AccountNavItem = ({ user }) => {
 };
 
 AccountNavItem.propTypes = {
-  user: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    imageURL: PropTypes.string.isRequired,
-  }).isRequired,
+  user: UserType.isRequired,
 };
 
 export default AccountNavItem;

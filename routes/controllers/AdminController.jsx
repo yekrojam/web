@@ -12,6 +12,7 @@ import UserModal from '../../components/User/UserModal';
 
 import { createUser, deleteUser, fetchUsers, updateUser } from '../../actions';
 import ActionTypes from '../../constants/ActionTypes';
+import { UserType } from '../../constants/propTypes';
 import getUserName from '../../utils/getUserName';
 import requestCompleted from '../../utils/requestCompleted';
 
@@ -154,20 +155,21 @@ class AdminController extends React.Component {
   }
 
   _handleSave = (user) => {
-    /* eslint-disable no-unused-expressions */
-    this.state.user ?
-      this.props.updateUser(user) :
-      this.props.createUser({
-        ...user,
-        // Defaults. TODO: Handle this better...
-        auth: `auth0|${(Math.random() * 1000000000).toFixed(0)}`,
-      });
-    /* eslint-enable no-unused-expressions */
+    if (this.state.user) {
+      this.props.updateUser(user);
+      return;
+    }
+
+    this.props.createUser({
+      ...user,
+      // Defaults. TODO: Handle this better...
+      auth: `auth0|${(Math.random() * 1000000000).toFixed(0)}`,
+    });
   }
 }
 
 AdminController.propTypes = {
-  users: PropTypes.arrayOf(PropTypes.object),
+  users: PropTypes.arrayOf(UserType),
 };
 
 const mapStateToProps = ({ pendingRequests, users }) => ({

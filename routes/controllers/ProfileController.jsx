@@ -1,6 +1,5 @@
 import { find, isEmpty } from 'lodash';
 import moment from 'moment';
-import PropTypes from 'prop-types';
 import React from 'react';
 import { Media } from 'react-bootstrap';
 import { connect } from 'react-redux';
@@ -10,6 +9,7 @@ import Page from '../../components/Page/Page';
 import { fetchUser } from '../../actions';
 
 import ActionTypes from '../../constants/ActionTypes';
+import { UserType } from '../../constants/propTypes';
 import getUserName from '../../utils/getUserName';
 
 /**
@@ -112,7 +112,7 @@ class ProfileController extends React.Component {
 }
 
 ProfileController.propTypes = {
-  user: PropTypes.object, /* eslint-disable-line react/forbid-prop-types */
+  user: UserType,
 };
 
 const mapStateToProps = (state, props) => {

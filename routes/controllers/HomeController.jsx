@@ -11,6 +11,7 @@ import PageHeader from '../../components/Page/PageHeader';
 
 import { fetchUsers } from '../../actions';
 import ActionTypes from '../../constants/ActionTypes';
+import { UserType } from '../../constants/propTypes';
 import getUserName from '../../utils/getUserName';
 
 const MemberCard = ({ user }) => {
@@ -104,7 +105,9 @@ class HomeController extends React.Component {
   }
 }
 
-HomeController.propTypes = { users: PropTypes.arrayOf(PropTypes.object) };
+HomeController.propTypes = {
+  users: PropTypes.arrayOf(UserType),
+};
 
 const mapStateToProps = ({ pendingRequests, users }) => ({
   pendingRequests,

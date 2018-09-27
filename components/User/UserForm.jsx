@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { Col, ControlLabel, FormControl, FormGroup, HelpBlock, Row } from 'react-bootstrap';
 
+import { UserType } from '../../constants/propTypes';
+
 const exists = value => !!(value && value.trim());
 
 const FIELDS = {
@@ -125,11 +127,10 @@ UserForm.validate = (user) => {
 };
 
 UserForm.propTypes = {
-  /* eslint-disable react/forbid-prop-types */
+  /* eslint-disable-next-line react/forbid-prop-types */
   errors: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
-  user: PropTypes.object.isRequired,
-  /* eslint-disable-line react/forbid-prop-types */
+  user: UserType.isRequired,
 };
 
 export default UserForm;

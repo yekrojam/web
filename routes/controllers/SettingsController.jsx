@@ -1,5 +1,4 @@
 import { find, isEmpty, isEqual } from 'lodash';
-import PropTypes from 'prop-types';
 import React from 'react';
 import { Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
@@ -11,6 +10,7 @@ import UserForm from '../../components/User/UserForm';
 
 import { fetchUser, updateUser } from '../../actions';
 import ActionTypes from '../../constants/ActionTypes';
+import { UserType } from '../../constants/propTypes';
 
 const getInitialState = props => ({
   errors: {},
@@ -92,7 +92,7 @@ class SettingsController extends React.Component {
 }
 
 SettingsController.propTypes = {
-  user: PropTypes.object, /* eslint-disable-line react/forbid-prop-types */
+  user: UserType,
 };
 
 const mapStateToProps = (state, props) => {
