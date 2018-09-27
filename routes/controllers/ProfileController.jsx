@@ -1,13 +1,13 @@
-import {find, isEmpty} from 'lodash';
+import { find, isEmpty } from 'lodash';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React from 'react';
-import {Media} from 'react-bootstrap';
-import {connect} from 'react-redux';
+import { Media } from 'react-bootstrap';
+import { connect } from 'react-redux';
 
 import Loader from '../../components/Loader/Loader';
 import Page from '../../components/Page/Page';
-import {fetchUser} from '../../actions';
+import { fetchUser } from '../../actions';
 
 import ActionTypes from '../../constants/ActionTypes';
 import getUserName from '../../utils/getUserName';
@@ -22,7 +22,7 @@ class ProfileController extends React.Component {
     this.props.fetchUser(this.props.match.params.userId);
   }
 
-  componentWillReceiveProps({match: {params}}) {
+  componentWillReceiveProps({ match: { params } }) {
     // Re-fetch data when navigating to a different profile.
     if (this.props.match.params.userId !== params.userId) {
       this.props.fetchUser(params.userId);
@@ -38,18 +38,18 @@ class ProfileController extends React.Component {
   }
 
   _renderContents = () => {
-    const {pendingRequests, user} = this.props;
+    const { pendingRequests, user } = this.props;
 
     if (isEmpty(user) || pendingRequests[ActionTypes.USERS_FETCH]) {
       return <Loader />;
     }
 
-    const {birthDate, birthMonth, birthYear, createdAt, email, phone} = user;
+    const { birthDate, birthMonth, birthYear, createdAt, email, phone } = user;
     const name = getUserName(user);
 
     const details = [
-      {data: moment(createdAt).format('MMMM YYYY'), label: 'Joined'},
-      {data: email, label: 'Email'},
+      { data: moment(createdAt).format('MMMM YYYY'), label: 'Joined' },
+      { data: email, label: 'Email' },
     ];
 
     if (phone) {
@@ -64,7 +64,7 @@ class ProfileController extends React.Component {
         .set({
           year: birthYear,
           month: birthMonth,
-          day: birthDate
+          day: birthDate,
         })
         .format('MMMM, Do YYYY');
 
@@ -82,8 +82,8 @@ class ProfileController extends React.Component {
           </Media.Left>
           <Media.Body>
             <h2>{name}</h2>
-            <ul style={{listStyle: 'none', paddingLeft: '0'}}>
-              {details.map(({data, label}) => (
+            <ul style={{ listStyle: 'none', paddingLeft: '0' }}>
+              {details.map(({ data, label }) => (
                 <li key={data}>
                   <strong>{label}:</strong> {data}
                 </li>
@@ -97,16 +97,21 @@ class ProfileController extends React.Component {
 }
 
 ProfileController.propTypes = {
-  user: PropTypes.object,
+  user: PropTypes.object, /* eslint-disable-line react/forbid-prop-types */
 };
 
-const mapStateToProps = ({pendingRequests, users}, {match: {params}}) => ({
-  pendingRequests,
-  user: find(users, (user) => user.id === params.userId),
-});
+const mapStateToProps = (state, props) => {
+  const { pendingRequests, users } = state;
+  const { match: { params } } = props;
 
-const mapDispatchToProps = (dispatch) => ({
-  fetchUser: (userId) => dispatch(fetchUser(userId)),
+  return {
+    pendingRequests,
+    user: find(users, user => user.id === params.userId),
+  };
+};
+
+const mapDispatchToProps = dispatch => ({
+  fetchUser: userId => dispatch(fetchUser(userId)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProfileController);

@@ -10,7 +10,42 @@
   "parserOptions": {
     "ecmaVersion": 8,
     "ecmaFeatures": {
-      "experimentalObjectRestSpread": true
+      "experimentalObjectRestSpread": true,
+      "jsx": true,
     }
   },
+  "rules": {
+    "no-underscore-dangle": [2, {"allowAfterThis": true}],
+    "no-unused-vars": [2, {"args": "none", "ignoreRestSiblings": true}],
+    "object-curly-newline": [2, {
+      "consistent": true,
+      "multiline": true,
+    }],
+    "operator-linebreak": [2, "after"],
+    "react/destructuring-assignment": 0,
+    "react/jsx-closing-bracket-location": [2, {
+      "nonEmpty": "after-props",
+      "selfClosing": "tag-aligned",
+    }],
+    "react/jsx-one-expression-per-line": 0,
+    "react/jsx-wrap-multilines": [2, {
+      "arrow": "parens-new-line",
+      "return": "parens-new-line",
+      "assignment": "ignore",
+      "condition": "ignore",
+      "declaration": "ignore",
+      "logical": "ignore",
+      "prop": "ignore"
+    }],
+    "react/prop-types": 0,
+    "react/require-default-props": 0,
+    "react/sort-comp": [2, {
+      "order": [
+        "static-methods",
+        "lifecycle",
+        "render",
+        "everything-else"
+      ],
+    }]
+  }
 }

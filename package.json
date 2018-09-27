@@ -7,7 +7,7 @@
     "dev": "npm run client && npm run server",
     "server": "DEBUG=@yekrojam/web:* nodemon index.js",
     "client": "webpack --mode development --watch --progress",
-    "lint": "eslint .",
+    "lint": "eslint . --ext js,jsx",
     "start": "npm run build && node index.js",
     "test": "karma start karma.conf.js"
   },

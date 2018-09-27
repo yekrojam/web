@@ -1,23 +1,23 @@
-import {isEmpty} from 'lodash';
+import { isEmpty } from 'lodash';
 import md5 from 'md5';
 import PropTypes from 'prop-types';
-import React, {Fragment} from 'react';
-import {Button, FormControl, Modal, Table} from 'react-bootstrap';
-import {connect} from 'react-redux';
-import {Link} from 'react-router-dom';
+import React from 'react';
+import { Button, FormControl, Table } from 'react-bootstrap';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 import Loader from '../../components/Loader/Loader';
 import Page from '../../components/Page/Page';
 import PageHeader from '../../components/Page/PageHeader';
 import UserModal from '../../components/User/UserModal';
 
-import {createUser, deleteUser, fetchUsers, updateUser} from '../../actions';
+import { createUser, deleteUser, fetchUsers, updateUser } from '../../actions';
 import ActionTypes from '../../constants/ActionTypes';
 import getUserName from '../../utils/getUserName';
 import requestCompleted from '../../utils/requestCompleted';
 import serialize from '../../utils/serialize';
 
-const getImageUrl = ({email, imageUrl}) => {
+const getImageUrl = ({ email, imageUrl }) => {
   if (imageUrl) {
     return imageUrl;
   }
@@ -61,10 +61,9 @@ class AdminController extends React.Component {
   }
 
   render() {
-    const {pendingRequests} = this.props;
+    const { pendingRequests } = this.props;
 
-    const isLoading =
-      pendingRequests[ActionTypes.USER_CREATE] ||
+    const isLoading = pendingRequests[ActionTypes.USER_CREATE] ||
       pendingRequests[ActionTypes.USER_DELETE] ||
       pendingRequests[ActionTypes.USER_UPDATE];
 
@@ -99,7 +98,7 @@ class AdminController extends React.Component {
   }
 
   _renderContents = () => {
-    const {pendingRequests, users} = this.props;
+    const { pendingRequests, users } = this.props;
 
     if (isEmpty(users) || pendingRequests[ActionTypes.USERS_FETCH]) {
       return <Loader />;
@@ -122,7 +121,7 @@ class AdminController extends React.Component {
           <tr>
             <th>Name</th>
             <th>Id</th>
-            <th style={{width: '10px'}}></th>
+            <th style={{ width: '10px' }} />
           </tr>
         </thead>
         <tbody>
@@ -132,33 +131,31 @@ class AdminController extends React.Component {
     );
   }
 
-  _renderUserRow = (user) => {
-    return (
-      <tr key={user.id}>
-        <td>
-          <Link to={{pathname: `/users/${user.id}`}}>
-            {getUserName(user)}
-          </Link>
-        </td>
-        <td>{user.id}</td>
-        <td>
-          <Button
-            bsSize="xs"
-            bsStyle="default"
-            onClick={(e) => this._handleModalShow(e, user)}>
-            Edit
-          </Button>
-        </td>
-      </tr>
-    );
-  }
+  _renderUserRow = user => (
+    <tr key={user.id}>
+      <td>
+        <Link to={{ pathname: `/users/${user.id}` }}>
+          {getUserName(user)}
+        </Link>
+      </td>
+      <td>{user.id}</td>
+      <td>
+        <Button
+          bsSize="xs"
+          bsStyle="default"
+          onClick={e => this._handleModalShow(e, user)}>
+          Edit
+        </Button>
+      </td>
+    </tr>
+  )
 
   _handleFilter = (e) => {
-    this.setState({filter: e.target.value});
+    this.setState({ filter: e.target.value });
   }
 
   _handleModalHide = () => {
-    this.setState({show: false});
+    this.setState({ show: false });
   }
 
   _handleModalShow = (e, user) => {
@@ -169,12 +166,14 @@ class AdminController extends React.Component {
   }
 
   _handleDelete = (userId) => {
+    /* eslint-disable-next-line no-restricted-globals, no-alert */
     if (confirm('Are you sure you want to delete this user?')) {
       this.props.deleteUser(userId);
     }
   }
 
   _handleSave = (user) => {
+    /* eslint-disable no-unused-expressions */
     this.state.user ?
       this.props.updateUser(user) :
       this.props.createUser({
@@ -183,6 +182,7 @@ class AdminController extends React.Component {
         auth: `auth0|${(Math.random() * 1000000000).toFixed(0)}`,
         imageUrl: getImageUrl(user),
       });
+    /* eslint-enable no-unused-expressions */
   }
 }
 
@@ -190,16 +190,16 @@ AdminController.propTypes = {
   users: PropTypes.arrayOf(PropTypes.object),
 };
 
-const mapStateToProps = ({pendingRequests, users}) => ({
+const mapStateToProps = ({ pendingRequests, users }) => ({
   pendingRequests,
   users,
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  createUser: (user) => dispatch(createUser(user)),
-  deleteUser: (userId) => dispatch(deleteUser(userId)),
+const mapDispatchToProps = dispatch => ({
+  createUser: user => dispatch(createUser(user)),
+  deleteUser: userId => dispatch(deleteUser(userId)),
   fetchUsers: () => dispatch(fetchUsers()),
-  updateUser: (user) => dispatch(updateUser(user)),
+  updateUser: user => dispatch(updateUser(user)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AdminController);

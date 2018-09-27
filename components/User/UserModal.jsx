@@ -1,25 +1,25 @@
-import {isEmpty} from 'lodash';
-import React, {Fragment} from 'react';
-import {Button, ControlLabel, FormControl, FormGroup, HelpBlock, Modal} from 'react-bootstrap';
+import { isEmpty } from 'lodash';
+import React, { Fragment } from 'react';
+import { Button, ControlLabel, FormControl, FormGroup, HelpBlock, Modal } from 'react-bootstrap';
 
-import Loader from '../../components/Loader/Loader';
+import Loader from '../Loader/Loader';
 
-const exists = (value) => !!(value && value.trim());
+const exists = value => !!(value && value.trim());
 
 const FIELDS = {
   email: {
     error: 'Please enter a valid user email.',
-    isValid: (value) => exists(value) && value.indexOf('@') > -1,
+    isValid: value => exists(value) && value.indexOf('@') > -1,
     label: 'Email',
   },
   name: {
     error: 'Please enter a user name.',
     isValid: exists,
-    'label': 'Name',
+    label: 'Name',
   },
 };
 
-const getInitialState = (props) => ({
+const getInitialState = props => ({
   errors: {},
   user: props.user || {},
 });
@@ -28,7 +28,7 @@ class UserModal extends React.Component {
   state = getInitialState(this.props);
 
   render() {
-    const {onDelete, onHide, onSave, show, user} = this.props;
+    const { onDelete, onHide, show, user } = this.props;
 
     return (
       <Modal
@@ -46,7 +46,7 @@ class UserModal extends React.Component {
             <Button
               bsStyle="link"
               onClick={() => onDelete(user.id)}
-              style={{float: 'left'}}>
+              style={{ float: 'left' }}>
               Delete
             </Button> :
             null
@@ -67,11 +67,11 @@ class UserModal extends React.Component {
       return <Loader />;
     }
 
-    const {errors, user} = this.state;
+    const { errors, user } = this.state;
 
     return (
       <Fragment>
-        {Object.keys(FIELDS).map(field => {
+        {Object.keys(FIELDS).map((field) => {
           const error = errors[field];
           return (
             <FormGroup key={field} validationState={error ? 'error' : null}>
@@ -91,14 +91,14 @@ class UserModal extends React.Component {
   }
 
   _handleChange = (e) => {
-    const {name, value} = e.target;
+    const { name, value } = e.target;
 
-    this.setState({
+    this.setState((state, props) => ({
       user: {
-        ...this.state.user,
+        ...state.user,
         [name]: value,
       },
-    });
+    }));
   }
 
   _handleEnter = (e) => {
@@ -106,7 +106,7 @@ class UserModal extends React.Component {
   }
 
   _handleSave = (e) => {
-    const {user} = this.state;
+    const { user } = this.state;
 
     // Basic client-side validation.
     const errors = {};
@@ -118,12 +118,12 @@ class UserModal extends React.Component {
     });
 
     if (!isEmpty(errors)) {
-      this.setState({errors});
+      this.setState({ errors });
       return;
     }
 
     this.props.onSave(user);
   }
-};
+}
 
 export default UserModal;

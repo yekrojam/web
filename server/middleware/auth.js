@@ -69,9 +69,7 @@ async function onVerify(accessToken, refreshToken, extraParams, profile, next) {
   try {
     const res = await fetch(`${API_URL}/login`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json; charset=utf-8',
-      },
+      headers: { 'Content-Type': 'application/json; charset=utf-8' },
       body: JSON.stringify(data),
     });
 

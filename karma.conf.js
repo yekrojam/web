@@ -1,6 +1,4 @@
-const webpackConfig = require('./webpack.config')(null, {
-  mode: 'development',
-});
+const webpackConfig = require('./webpack.config')(null, { mode: 'development' });
 
 module.exports = (config) => {
   config.set({
@@ -16,19 +14,11 @@ module.exports = (config) => {
     },
     files: ['test.webpack.js'],
     frameworks: ['chai', 'mocha'],
-    preprocessors: {
-      'test.webpack.js': ['webpack', 'sourcemap'],
-    },
+    preprocessors: { 'test.webpack.js': ['webpack', 'sourcemap'] },
     reporters: ['dots'],
     singleRun: true,
-    webpack: Object.assign(webpackConfig, {
-      devtool: 'inline-source-map',
-    }),
-    webpackMiddleware: {
-      stats: 'errors-only',
-    },
-    webpackServer: {
-      noInfo: true,
-    },
+    webpack: Object.assign(webpackConfig, { devtool: 'inline-source-map' }),
+    webpackMiddleware: { stats: 'errors-only' },
+    webpackServer: { noInfo: true },
   });
 };

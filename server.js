@@ -28,9 +28,7 @@ const app = express();
 // Add middleware.
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({
-  extended: true,
-}));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(cookieSession({
   // Set a long expiration time so people don't have to login often.
@@ -55,9 +53,7 @@ app.use(cors({
   credentials: true,
 }));
 
-app.use(csrf({
-  ignoreMethods: ['GET', 'HEAD', 'OPTIONS'],
-}));
+app.use(csrf({ ignoreMethods: ['GET', 'HEAD', 'OPTIONS'] }));
 
 app.use(helmet());
 

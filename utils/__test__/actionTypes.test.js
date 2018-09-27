@@ -1,8 +1,6 @@
 import { expect } from 'chai';
 
-import {
-  getBaseType, getErrorType, getSuccessType, isBaseType,
-} from '../actionTypes';
+import { getBaseType, getErrorType, getSuccessType, isBaseType } from '../actionTypes';
 
 const BASE_TYPE = 'BASE_TYPE';
 const ERROR_TYPE = 'BASE_TYPE_ERROR';

@@ -42,9 +42,7 @@ module.exports = (env, argv) => {
           exclude: /node_modules/,
           use: {
             loader: 'babel-loader',
-            options: {
-              cacheDirectory: true,
-            },
+            options: { cacheDirectory: true },
           },
         },
         {
@@ -92,11 +90,7 @@ module.exports = (env, argv) => {
         new OptimizeCSSAssetsPlugin({}),
         new UglifyJsPlugin({
           cache: true,
-          uglifyOptions: {
-            output: {
-              comments: false,
-            },
-          },
+          uglifyOptions: { output: { comments: false } },
         }),
       ],
       splitChunks: {
@@ -119,12 +113,8 @@ module.exports = (env, argv) => {
       }),
       // Don't pull in all of Moment's locales
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-      new ManifestPlugin({
-        fileName: 'webpack-manifest.json',
-      }),
-      new MiniCssExtractPlugin({
-        filename: PROD ? '[name]-[contenthash:16].css' : '[name].css',
-      }),
+      new ManifestPlugin({ fileName: 'webpack-manifest.json' }),
+      new MiniCssExtractPlugin({ filename: PROD ? '[name]-[contenthash:16].css' : '[name].css' }),
     ],
     resolve: {
       extensions: ['.js', '.jsx', '.json'],

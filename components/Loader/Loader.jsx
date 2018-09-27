@@ -10,7 +10,7 @@ import './Loader.scss';
  * Displays a loading indicator.
  */
 const Loader = (props) => {
-  const {background, size, full, className} = props;
+  const { background, size, full, className } = props;
 
   return (
     <div
@@ -19,9 +19,7 @@ const Loader = (props) => {
         'loader-full': full,
       }, className)}>
       <i
-        className={cx('loader-icon', {
-          'loader-icon-lg': size === 'large',
-        })}
+        className={cx('loader-icon', { 'loader-icon-lg': size === 'large' })}
       />
     </div>
   );

@@ -1,20 +1,19 @@
 import React from 'react';
-import {MenuItem, Nav, Navbar, NavDropdown, NavItem} from 'react-bootstrap';
-import {connect} from 'react-redux';
-import {LinkContainer} from 'react-router-bootstrap';
-import {Link} from 'react-router-dom';
+import { Nav, Navbar, NavItem } from 'react-bootstrap';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 import AccountNavItem from './AccountNavItem';
 
-import {APP_NAME, AUTH_PATH, HOME_PATH} from '../../constants/app';
+import { APP_NAME, AUTH_PATH, HOME_PATH } from '../../constants/app';
 
 /**
  * Header
  */
 const Header = (props) => {
-  const {session: {user}} = props;
+  const { session: { user } } = props;
 
-  const navItems = !!(user && user.id) ?
+  const navItems = user && user.id ?
     <AccountNavItem user={user} /> :
     <NavItem href={AUTH_PATH}>
       Sign In
@@ -24,7 +23,7 @@ const Header = (props) => {
     <Navbar className="app-header" fixedTop>
       <Navbar.Header>
         <Navbar.Brand>
-          <Link to={{pathname: HOME_PATH}}>
+          <Link to={{ pathname: HOME_PATH }}>
             {APP_NAME}
           </Link>
         </Navbar.Brand>
@@ -39,8 +38,6 @@ const Header = (props) => {
   );
 };
 
-const mapStateToProps = ({session}) => ({
-  session,
-});
+const mapStateToProps = ({ session }) => ({ session });
 
 export default connect(mapStateToProps)(Header);

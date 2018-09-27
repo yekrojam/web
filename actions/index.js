@@ -41,9 +41,7 @@ export const createUser = data => dispatch => (
 );
 
 export const deleteUser = userId => dispatch => (
-  dispatch(request(`/user/${userId}`, ActionTypes.USER_DELETE, {
-    method: 'DELETE',
-  }))
+  dispatch(request(`/user/${userId}`, ActionTypes.USER_DELETE, { method: 'DELETE' }))
 );
 
 export const fetchUser = userId => (dispatch, getState) => {

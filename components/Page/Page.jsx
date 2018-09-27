@@ -4,13 +4,13 @@ import React from 'react';
 import BasePage from './BasePage';
 import Header from './Header';
 
-import {APP_NAME} from '../../constants/app';
+import { APP_NAME } from '../../constants/app';
 import './styles/Page.scss';
 
 /**
  * Page
  */
-const Page = ({children, className, title}) => (
+const Page = ({ children, className, title }) => (
   <BasePage className={cx('app-page', className)} title={title}>
     <Header />
     <div className="app-content container">

@@ -2,7 +2,7 @@ import cx from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import {APP_NAME} from '../../constants/app';
+import { APP_NAME } from '../../constants/app';
 
 const setTitle = (title) => {
   document.title = title ? `${APP_NAME} \u00b7 ${title}` : APP_NAME;
@@ -36,8 +36,6 @@ class BasePage extends React.Component {
   }
 }
 
-BasePage.propTypes = {
-  title: PropTypes.string,
-};
+BasePage.propTypes = { title: PropTypes.string.isRequired };
 
 export default BasePage;
