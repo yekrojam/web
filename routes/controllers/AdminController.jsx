@@ -1,5 +1,4 @@
 import { isEmpty } from 'lodash';
-import md5 from 'md5';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Button, FormControl, Table } from 'react-bootstrap';
@@ -15,21 +14,8 @@ import { createUser, deleteUser, fetchUsers, updateUser } from '../../actions';
 import ActionTypes from '../../constants/ActionTypes';
 import getUserName from '../../utils/getUserName';
 import requestCompleted from '../../utils/requestCompleted';
-import serialize from '../../utils/serialize';
 
-const getImageUrl = ({ email, imageUrl }) => {
-  if (imageUrl) {
-    return imageUrl;
-  }
-
-  const queryString = serialize({
-    d: 'identicon',
-    s: 480,
-  });
-
-  // Display a default image.
-  return `https://s.gravatar.com/avatar/${md5(email)}?${queryString}`;
-};
+import './styles/AdminController.scss';
 
 /**
  * AdminController
@@ -68,20 +54,15 @@ class AdminController extends React.Component {
       pendingRequests[ActionTypes.USER_UPDATE];
 
     return (
-      <Page title="Admin">
+      <Page className="admin" title="Admin">
         <PageHeader title="Users">
           <Button onClick={this._handleModalShow}>
             Add User
           </Button>
           <FormControl
+            className="user-filter"
             onChange={this._handleFilter}
             placeholder="Filter users..."
-            style={{
-              display: 'inline-block',
-              marginLeft: '5px',
-              verticalAlign: 'middle',
-              width: '300px',
-            }}
           />
         </PageHeader>
         {this._renderContents()}
@@ -121,7 +102,7 @@ class AdminController extends React.Component {
           <tr>
             <th>Name</th>
             <th>Id</th>
-            <th style={{ width: '10px' }} />
+            <th className="controls" />
           </tr>
         </thead>
         <tbody>
@@ -180,7 +161,6 @@ class AdminController extends React.Component {
         ...user,
         // Defaults. TODO: Handle this better...
         auth: `auth0|${(Math.random() * 1000000000).toFixed(0)}`,
-        imageUrl: getImageUrl(user),
       });
     /* eslint-enable no-unused-expressions */
   }

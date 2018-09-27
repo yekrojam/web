@@ -44,7 +44,15 @@ class ProfileController extends React.Component {
       return <Loader />;
     }
 
-    const { birthDate, birthMonth, birthYear, createdAt, email, phone } = user;
+    const {
+      birthDate,
+      birthMonth,
+      birthYear,
+      createdAt,
+      email,
+      gender,
+      phone,
+    } = user;
     const name = getUserName(user);
 
     const details = [
@@ -59,14 +67,21 @@ class ProfileController extends React.Component {
       });
     }
 
+    if (gender) {
+      details.push({
+        data: gender,
+        label: 'Gender',
+      });
+    }
+
     if (birthYear && birthMonth && birthDate) {
       const data = moment()
         .set({
           year: birthYear,
           month: birthMonth,
-          day: birthDate,
+          date: birthDate,
         })
-        .format('MMMM, Do YYYY');
+        .format('MMMM Do, YYYY');
 
       details.push({
         data,

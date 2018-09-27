@@ -1,23 +1,9 @@
 import { isEmpty } from 'lodash';
-import React, { Fragment } from 'react';
-import { Button, ControlLabel, FormControl, FormGroup, HelpBlock, Modal } from 'react-bootstrap';
+import React from 'react';
+import { Button, Modal } from 'react-bootstrap';
 
 import Loader from '../Loader/Loader';
-
-const exists = value => !!(value && value.trim());
-
-const FIELDS = {
-  email: {
-    error: 'Please enter a valid user email.',
-    isValid: value => exists(value) && value.indexOf('@') > -1,
-    label: 'Email',
-  },
-  name: {
-    error: 'Please enter a user name.',
-    isValid: exists,
-    label: 'Name',
-  },
-};
+import UserForm from './UserForm';
 
 const getInitialState = props => ({
   errors: {},
@@ -28,7 +14,14 @@ class UserModal extends React.Component {
   state = getInitialState(this.props);
 
   render() {
-    const { onDelete, onHide, show, user } = this.props;
+    const { isLoading, onDelete, onHide, show, user } = this.props;
+
+    const contents = isLoading ?
+      <Loader /> :
+      <UserForm
+        {...this.state}
+        onChange={this._handleChange}
+      />;
 
     return (
       <Modal
@@ -39,12 +32,12 @@ class UserModal extends React.Component {
           <Modal.Title>{user ? 'Edit' : 'Add'} User</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {this._renderContents()}
+          {contents}
         </Modal.Body>
         <Modal.Footer>
           {user ?
             <Button
-              bsStyle="link"
+              bsStyle="danger"
               onClick={() => onDelete(user.id)}
               style={{ float: 'left' }}>
               Delete
@@ -59,34 +52,6 @@ class UserModal extends React.Component {
           </Button>
         </Modal.Footer>
       </Modal>
-    );
-  }
-
-  _renderContents = () => {
-    if (this.props.isLoading) {
-      return <Loader />;
-    }
-
-    const { errors, user } = this.state;
-
-    return (
-      <Fragment>
-        {Object.keys(FIELDS).map((field) => {
-          const error = errors[field];
-          return (
-            <FormGroup key={field} validationState={error ? 'error' : null}>
-              <ControlLabel>{FIELDS[field].label}</ControlLabel>
-              <FormControl
-                name={field}
-                onChange={this._handleChange}
-                type="text"
-                value={user[field] || ''}
-              />
-              {error ? <HelpBlock>{error}</HelpBlock> : null}
-            </FormGroup>
-          );
-        })}
-      </Fragment>
     );
   }
 
@@ -109,13 +74,7 @@ class UserModal extends React.Component {
     const { user } = this.state;
 
     // Basic client-side validation.
-    const errors = {};
-    Object.keys(FIELDS).forEach((name) => {
-      const field = FIELDS[name];
-      if (!field.isValid(user[name])) {
-        errors[name] = field.error;
-      }
-    });
+    const errors = UserForm.validate(user);
 
     if (!isEmpty(errors)) {
       this.setState({ errors });
