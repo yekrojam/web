@@ -1,4 +1,5 @@
 import { range } from 'lodash';
+import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { Col, ControlLabel, FormControl, FormGroup, HelpBlock, Row } from 'react-bootstrap';
 
@@ -121,6 +122,14 @@ UserForm.validate = (user) => {
     }
   });
   return errors;
+};
+
+UserForm.propTypes = {
+  /* eslint-disable react/forbid-prop-types */
+  errors: PropTypes.object.isRequired,
+  onChange: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
+  /* eslint-disable-line react/forbid-prop-types */
 };
 
 export default UserForm;

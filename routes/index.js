@@ -3,6 +3,7 @@ import Home from './controllers/HomeController';
 import Index from './controllers/IndexController';
 import NotFound from './controllers/NotFoundController';
 import Profile from './controllers/ProfileController';
+import Settings from './controllers/SettingsController';
 
 import { HOME_PATH, INDEX_PATH } from '../constants/app';
 
@@ -20,6 +21,10 @@ export default [
   {
     path: '/users/:userId',
     component: Profile,
+  },
+  {
+    path: '/settings',
+    component: Settings,
   },
   {
     path: '/admin',
