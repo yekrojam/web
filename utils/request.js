@@ -1,21 +1,12 @@
-import fetch from 'isomorphic-fetch';
-
 import { getErrorType, getSuccessType } from './actionTypes';
+import api from './api';
 
-export default (url, type, options = {}) => (dispatch) => {
+export default (url, type, options = {}) => (dispatch, getState) => {
   dispatch({ type });
 
-  // Normalize url string.
-  const urlString = url.indexOf('/') === 0 ? url.replace('/', '') : url;
+  const { authToken } = getState().session;
 
-  fetch(`${process.env.API_URL}/${urlString}`, {
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    ...options,
-  })
-    .then(res => res.json())
+  api(url, { ...options, authToken })
     .then((data) => {
       // TODO: Handle 400 errors.
       dispatch({

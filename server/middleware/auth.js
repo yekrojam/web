@@ -1,9 +1,10 @@
 import passport from 'passport';
 import Auth0Strategy from 'passport-auth0';
 
-import { AUTH_PATH, HOME_PATH } from '../../constants/app';
+import api from '../../utils/api';
+import generateToken from '../utils/generateToken';
 
-const { API_URL } = process.env;
+import { AUTH_PATH, HOME_PATH } from '../../constants/app';
 
 export function redirectIfAuthenticated(req, res, next) {
   if (!req.isAuthenticated()) {
@@ -67,13 +68,13 @@ async function onVerify(accessToken, refreshToken, extraParams, profile, next) {
   };
 
   try {
-    const res = await fetch(`${API_URL}/login`, {
+    const user = await api('/login', {
+      authToken: generateToken({}),
       method: 'POST',
-      headers: { 'Content-Type': 'application/json; charset=utf-8' },
       body: JSON.stringify(data),
     });
 
-    const user = await res.json();
+    // const user = await res.json();
 
     next(null, user);
   } catch (error) {
@@ -87,8 +88,9 @@ function serializeUser(user, next) {
 
 async function deserializeUser(id, next) {
   try {
-    const res = await fetch(`${API_URL}/user/${id}`);
-    const user = await res.json();
+    const user = await api(`/user/${id}`, {
+      authToken: generateToken({ id }),
+    });
     next(null, user);
   } catch (error) {
     next(error);

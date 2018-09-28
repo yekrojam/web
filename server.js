@@ -43,8 +43,9 @@ app.use(passport.session());
 
 // Make the user data and auth token available as part of the session.
 app.use((req, res, next) => {
-  req.session.authToken = generateToken(req.user);
-  req.session.user = req.user;
+  const user = req.user || {};
+  req.session.authToken = generateToken({ id: user.id });
+  req.session.user = user;
   next();
 });
 
