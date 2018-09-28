@@ -1,16 +1,18 @@
 import { isEmpty } from 'lodash';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Button, FormControl, Table } from 'react-bootstrap';
+import { Button, ButtonToolbar, FormControl, Table } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import Loader from '../../components/Loader/Loader';
+import MembershipModal from '../../components/Membership/MembershipModal';
+import OrgModal from '../../components/Org/OrgModal';
 import Page from '../../components/Page/Page';
 import PageHeader from '../../components/Page/PageHeader';
 import UserModal from '../../components/User/UserModal';
 
-import { createUser, deleteUser, fetchUsers, updateUser } from '../../actions';
+import { createMembership, createOrg, createUser, deleteUser, fetchUsers, updateUser } from '../../actions';
 import ActionTypes from '../../constants/ActionTypes';
 import { UserType } from '../../constants/propTypes';
 import getUserName from '../../utils/getUserName';
@@ -26,6 +28,8 @@ import './styles/AdminController.scss';
 class AdminController extends React.Component {
   state = {
     filter: '',
+    membership: null,
+    org: null,
     show: false,
     user: null,
   };
@@ -36,6 +40,8 @@ class AdminController extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     const requests = [
+      ActionTypes.MEMBERSHIP_CREATE,
+      ActionTypes.ORG_CREATE,
       ActionTypes.USER_CREATE,
       ActionTypes.USER_DELETE,
       ActionTypes.USER_UPDATE,
@@ -49,31 +55,57 @@ class AdminController extends React.Component {
 
   render() {
     const { pendingRequests } = this.props;
+    const { membership, org, show, user } = this.state;
 
-    const isLoading = pendingRequests[ActionTypes.USER_CREATE] ||
+    const isLoading =
+      pendingRequests[ActionTypes.MEMBERSHIP_CREATE] ||
+      pendingRequests[ActionTypes.ORG_CREATE] ||
+      pendingRequests[ActionTypes.USER_CREATE] ||
       pendingRequests[ActionTypes.USER_DELETE] ||
       pendingRequests[ActionTypes.USER_UPDATE];
 
     return (
       <Page className="admin" title="Admin">
         <PageHeader title="Users">
-          <Button onClick={this._handleModalShow}>
-            Add User
-          </Button>
-          <FormControl
-            className="user-filter"
-            onChange={this._handleFilter}
-            placeholder="Filter users..."
-          />
+          <ButtonToolbar>
+            <Button onClick={this._handleModalShow}>
+              Add User
+            </Button>
+            <Button onClick={this._handleOrgModalShow}>
+              Add Org
+            </Button>
+            <Button onClick={this._handleMembershipModalShow}>
+              Add Membership
+            </Button>
+            <FormControl
+              className="user-filter"
+              onChange={this._handleFilter}
+              placeholder="Filter users..."
+            />
+          </ButtonToolbar>
         </PageHeader>
         {this._renderContents()}
+        <MembershipModal
+          isLoading={isLoading}
+          onHide={this._handleModalHide}
+          onSave={this._handleMembershipSave}
+          show={show === 'membership'}
+          membership={membership}
+        />
+        <OrgModal
+          isLoading={isLoading}
+          onHide={this._handleModalHide}
+          onSave={this._handleOrgSave}
+          show={show === 'org'}
+          org={org}
+        />
         <UserModal
           isLoading={isLoading}
           onDelete={this._handleDelete}
           onHide={this._handleModalHide}
           onSave={this._handleSave}
-          show={this.state.show}
-          user={this.state.user}
+          show={show === 'user'}
+          user={user}
         />
       </Page>
     );
@@ -140,9 +172,23 @@ class AdminController extends React.Component {
     this.setState({ show: false });
   }
 
+  _handleMembershipModalShow = (e, membership) => {
+    this.setState({
+      membership,
+      show: 'membership',
+    });
+  }
+
+  _handleOrgModalShow = (e, org) => {
+    this.setState({
+      org,
+      show: 'org',
+    });
+  }
+
   _handleModalShow = (e, user) => {
     this.setState({
-      show: true,
+      show: 'user',
       user,
     });
   }
@@ -152,6 +198,14 @@ class AdminController extends React.Component {
     if (confirm('Are you sure you want to delete this user?')) {
       this.props.deleteUser(userId);
     }
+  }
+
+  _handleMembershipSave = (membership) => {
+    this.props.createMembership(membership);
+  }
+
+  _handleOrgSave = (org) => {
+    this.props.createOrg(org);
   }
 
   _handleSave = (user) => {
@@ -178,6 +232,8 @@ const mapStateToProps = ({ pendingRequests, users }) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+  createMembership: membership => dispatch(createMembership(membership)),
+  createOrg: org => dispatch(createOrg(org)),
   createUser: user => dispatch(createUser(user)),
   deleteUser: userId => dispatch(deleteUser(userId)),
   fetchUsers: () => dispatch(fetchUsers()),

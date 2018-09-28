@@ -4,6 +4,10 @@ import { getErrorType, getSuccessType } from '../utils/actionTypes';
 const TYPES = [
   'SESSION_INITIALIZE',
 
+  'MEMBERSHIP_CREATE',
+
+  'ORG_CREATE',
+
   'USER_CREATE',
   'USER_DELETE',
   'USER_FETCH',

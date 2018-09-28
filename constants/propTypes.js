@@ -3,8 +3,8 @@
 import PropTypes from 'prop-types';
 
 export const UserType = PropTypes.shape({
-  email: PropTypes.string.isRequired,
-  id: PropTypes.string.isRequired,
-  imageURL: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
+  email: PropTypes.string,
+  id: PropTypes.string,
+  imageURL: PropTypes.string,
+  name: PropTypes.string,
 });

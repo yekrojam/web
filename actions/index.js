@@ -1,37 +1,22 @@
 import { find } from 'lodash';
-import fetch from 'isomorphic-fetch';
 
-import { getErrorType, getSuccessType } from '../utils/actionTypes';
 import ActionTypes from '../constants/ActionTypes';
+import { getSuccessType } from '../utils/actionTypes';
+import request from '../utils/request';
 
-const request = (url, type, options = {}) => (dispatch) => {
-  dispatch({ type });
+export const createMembership = data => dispatch => (
+  dispatch(request('/membership', ActionTypes.MEMBERSHIP_CREATE, {
+    body: JSON.stringify(data),
+    method: 'POST',
+  }))
+);
 
-  // Normalize url string.
-  const urlString = url.indexOf('/') === 0 ? url.replace('/', '') : url;
-
-  fetch(`${process.env.API_URL}/${urlString}`, {
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    ...options,
-  })
-    .then(res => res.json())
-    .then((data) => {
-      // TODO: Handle 400 errors.
-      dispatch({
-        data,
-        type: getSuccessType(type),
-      });
-    })
-    .catch((error) => {
-      dispatch({
-        error,
-        type: getErrorType(type),
-      });
-    });
-};
+export const createOrg = data => dispatch => (
+  dispatch(request('/org', ActionTypes.ORG_CREATE, {
+    body: JSON.stringify(data),
+    method: 'POST',
+  }))
+);
 
 export const createUser = data => dispatch => (
   dispatch(request('/user', ActionTypes.USER_CREATE, {
@@ -41,7 +26,9 @@ export const createUser = data => dispatch => (
 );
 
 export const deleteUser = userId => dispatch => (
-  dispatch(request(`/user/${userId}`, ActionTypes.USER_DELETE, { method: 'DELETE' }))
+  dispatch(request(`/user/${userId}`, ActionTypes.USER_DELETE, {
+    method: 'DELETE',
+  }))
 );
 
 export const fetchUser = userId => (dispatch, getState) => {
@@ -64,7 +51,7 @@ export const fetchUser = userId => (dispatch, getState) => {
 export const updateUser = data => dispatch => (
   dispatch(request(`/user/${data.id}`, ActionTypes.USER_UPDATE, {
     body: JSON.stringify(data),
-    method: 'PUT',
+    method: 'PATCH',
   }))
 );
 
