@@ -1,5 +1,3 @@
-/* eslint-disable react/destructuring-assignment */
-
 import { expect } from 'chai';
 
 import requestCompleted from '../requestCompleted';

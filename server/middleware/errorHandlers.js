@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-
 function handleErrorDev(error, req, res, next) {
   // Just dump the error with a stack trace in dev to make debugging easier.
   res.status(error.status || 500);
