@@ -10,6 +10,10 @@ const webpack = require('webpack');
 
 const { API_URL, NODE_ENV } = process.env;
 
+function getFilename(isProd, extension = 'js') {
+  return `[name]${isProd ? '-[contenthash:16]' : ''}.${extension}`;
+}
+
 module.exports = (env, argv) => {
   const PROD = argv.mode === 'production';
 
@@ -99,8 +103,8 @@ module.exports = (env, argv) => {
       },
     },
     output: {
-      chunkFilename: PROD ? '[name]-[contenthash:16].js' : '[name].js',
-      filename: PROD ? '[name]-[contenthash:16].js' : '[name].js',
+      chunkFilename: getFilename(PROD),
+      filename: getFilename(PROD),
       path: path.resolve(__dirname, 'public', 'build'),
       publicPath: '/build/',
     },
@@ -113,8 +117,12 @@ module.exports = (env, argv) => {
       }),
       // Don't pull in all of Moment's locales
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-      new ManifestPlugin({ fileName: 'webpack-manifest.json' }),
-      new MiniCssExtractPlugin({ filename: PROD ? '[name]-[contenthash:16].css' : '[name].css' }),
+      new ManifestPlugin({
+        fileName: 'webpack-manifest.json',
+      }),
+      new MiniCssExtractPlugin({
+        filename: getFilename(PROD, 'css'),
+      }),
     ],
     resolve: {
       extensions: ['.js', '.jsx', '.json'],
