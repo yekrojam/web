@@ -11,8 +11,8 @@
   ],
   "plugins": [
     "lodash",
-    "syntax-object-rest-spread",
-    "transform-class-properties",
+    "@babel/plugin-syntax-object-rest-spread",
+    "@babel/plugin-proposal-class-properties",
     ["transform-imports", {
       "lodash": {
         "transform": "lodash/${member}",
@@ -29,12 +29,12 @@
     }]
   ],
   "presets": [
-    ["env", {
+    ["@babel/preset-env", {
       "targets": {
         "browsers": ["last 2 versions"],
         "node": "current",
       }
     }],
-    "react"
+    "@babel/preset-react"
   ],
 }
