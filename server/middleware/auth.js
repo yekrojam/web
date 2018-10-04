@@ -74,8 +74,6 @@ async function onVerify(accessToken, refreshToken, extraParams, profile, next) {
       body: JSON.stringify(data),
     });
 
-    // const user = await res.json();
-
     next(null, user);
   } catch (error) {
     next(error);
