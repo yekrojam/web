@@ -13,6 +13,7 @@ const TYPES = [
   'USER_FETCH',
   'USER_UPDATE',
 
+  'ORGS_FETCH',
   'USERS_FETCH',
 ];
 

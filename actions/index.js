@@ -55,6 +55,10 @@ export const updateUser = data => dispatch => (
   }))
 );
 
+export const fetchOrgs = () => dispatch => (
+  dispatch(request('/org', ActionTypes.ORGS_FETCH))
+);
+
 export const fetchUsers = () => dispatch => (
   dispatch(request('/user', ActionTypes.USERS_FETCH))
 );

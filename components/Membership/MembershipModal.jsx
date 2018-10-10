@@ -8,13 +8,13 @@ const exists = value => !!(value && value.trim());
 
 const FIELDS = {
   org: {
-    error: 'Please enter an org id.',
+    error: 'Please select an org.',
     isValid: exists,
     label: 'Org',
     required: true,
   },
   user: {
-    error: 'Please enter a user id.',
+    error: 'Please select a user.',
     isValid: exists,
     label: 'User',
     required: true,
@@ -38,14 +38,22 @@ class MembershipModal extends React.Component {
         {Object.keys(FIELDS).map((name) => {
           const error = this.state.errors[name];
           const field = FIELDS[name];
+          const options = this.props[`${name}s`];
 
           return (
             <FormGroup key={name} validationState={error ? 'error' : null}>
               <ControlLabel>{field.label}</ControlLabel>
               <FormControl
+                componentClass="select"
                 name={name}
-                onChange={this._handleChange}
-              />
+                onChange={this._handleChange}>
+                <option value={-1}>Select a {name}...</option>
+                {options.map(o => (
+                  <option key={o.id} value={o.id}>
+                    {o.name}
+                  </option>
+                ))}
+              </FormControl>
               {error ? <HelpBlock>{error}</HelpBlock> : null}
             </FormGroup>
           );

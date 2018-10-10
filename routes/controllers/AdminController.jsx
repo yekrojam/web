@@ -12,7 +12,7 @@ import Page from '../../components/Page/Page';
 import PageHeader from '../../components/Page/PageHeader';
 import UserModal from '../../components/User/UserModal';
 
-import { createMembership, createOrg, createUser, deleteUser, fetchUsers, updateUser } from '../../actions';
+import { createMembership, createOrg, createUser, deleteUser, fetchOrgs, fetchUsers, updateUser } from '../../actions';
 import ActionTypes from '../../constants/ActionTypes';
 import { UserType } from '../../constants/propTypes';
 import getUserName from '../../utils/getUserName';
@@ -35,6 +35,7 @@ class AdminController extends React.Component {
   };
 
   componentDidMount() {
+    this.props.fetchOrgs();
     this.props.fetchUsers();
   }
 
@@ -54,7 +55,7 @@ class AdminController extends React.Component {
   }
 
   render() {
-    const { pendingRequests } = this.props;
+    const { orgs, pendingRequests, users } = this.props;
     const { membership, org, show, user } = this.state;
 
     const isLoading =
@@ -89,15 +90,17 @@ class AdminController extends React.Component {
           isLoading={isLoading}
           onHide={this._handleModalHide}
           onSave={this._handleMembershipSave}
-          show={show === 'membership'}
+          orgs={orgs || []}
           membership={membership}
+          show={show === 'membership'}
+          users={users || []}
         />
         <OrgModal
           isLoading={isLoading}
           onHide={this._handleModalHide}
           onSave={this._handleOrgSave}
-          show={show === 'org'}
           org={org}
+          show={show === 'org'}
         />
         <UserModal
           isLoading={isLoading}
@@ -214,11 +217,7 @@ class AdminController extends React.Component {
       return;
     }
 
-    this.props.createUser({
-      ...user,
-      // Defaults. TODO: Handle this better...
-      auth: `auth0|${(Math.random() * 1000000000).toFixed(0)}`,
-    });
+    this.props.createUser(user);
   }
 }
 
@@ -226,7 +225,8 @@ AdminController.propTypes = {
   users: PropTypes.arrayOf(UserType),
 };
 
-const mapStateToProps = ({ pendingRequests, users }) => ({
+const mapStateToProps = ({ orgs, pendingRequests, users }) => ({
+  orgs,
   pendingRequests,
   users,
 });
@@ -236,6 +236,7 @@ const mapDispatchToProps = dispatch => ({
   createOrg: org => dispatch(createOrg(org)),
   createUser: user => dispatch(createUser(user)),
   deleteUser: userId => dispatch(deleteUser(userId)),
+  fetchOrgs: () => dispatch(fetchOrgs()),
   fetchUsers: () => dispatch(fetchUsers()),
   updateUser: user => dispatch(updateUser(user)),
 });
