@@ -6,6 +6,12 @@ import { UserType } from '../../constants/propTypes';
 
 import './styles/AccountNavItem.scss';
 
+const AppMenuItem = ({ children, to }) => (
+  <LinkContainer isActive={() => false} to={to}>
+    <MenuItem>{children}</MenuItem>
+  </LinkContainer>
+);
+
 const AccountNavItem = ({ user }) => {
   const items = [
     { label: 'My profile', pathname: `/users/${user.id}` },
@@ -24,10 +30,14 @@ const AccountNavItem = ({ user }) => {
       }>
       <li className="arrow" />
       {items.map(({ label, pathname }) => (
-        <LinkContainer isActive={() => false} key={pathname} to={{ pathname }}>
-          <MenuItem>{label}</MenuItem>
-        </LinkContainer>
+        <AppMenuItem key={pathname} to={{ pathname }}>
+          {label}
+        </AppMenuItem>
       ))}
+      <MenuItem divider />
+      <AppMenuItem to={{ pathname: '/admin' }}>
+        Admin
+      </AppMenuItem>
       <MenuItem divider />
       <MenuItem href="/logout">
         Sign Out
