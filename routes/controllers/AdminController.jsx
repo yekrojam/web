@@ -81,7 +81,7 @@ class AdminController extends React.Component {
             <FormControl
               className="user-filter"
               onChange={this._handleFilter}
-              placeholder="Filter users..."
+              placeholder="Search..."
             />
           </ButtonToolbar>
         </PageHeader>

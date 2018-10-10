@@ -71,7 +71,7 @@ class HomeController extends React.Component {
         <PageHeader title={title}>
           <FormControl
             onChange={this._handleFilter}
-            placeholder="Filter by name..."
+            placeholder="Search..."
           />
         </PageHeader>
         {this._renderContents()}
@@ -81,6 +81,7 @@ class HomeController extends React.Component {
 
   _renderContents = () => {
     const { pendingRequests, users } = this.props;
+    const filter = this.state.filter.toLowerCase();
 
     if (isEmpty(users) || pendingRequests[ActionTypes.USERS_FETCH]) {
       return <Loader />;
@@ -89,7 +90,10 @@ class HomeController extends React.Component {
     return (
       <Row>
         {users
-          .filter(user => getUserName(user).indexOf(this.state.filter) !== -1)
+          .filter(user => (
+            getUserName(user).toLowerCase().indexOf(filter) !== -1 ||
+            user.email.toLowerCase().indexOf(filter) !== -1
+          ))
           .map(user => (
             <Col key={user.id} lg={4} sm={6} xs={12}>
               <MemberCard user={user} />
