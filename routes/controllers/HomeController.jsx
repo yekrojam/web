@@ -1,7 +1,7 @@
 import { isEmpty } from 'lodash';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Col, FormControl, Media, Panel, Row } from 'react-bootstrap';
+import { Col, FormControl, Label, Media, Panel, Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
@@ -15,6 +15,7 @@ import { UserType } from '../../constants/propTypes';
 import getUserName from '../../utils/getUserName';
 
 const MemberCard = ({ user }) => {
+  const isAdmin = user.roles.indexOf('ADMIN') > -1;
   const name = getUserName(user);
 
   const details = [
@@ -34,6 +35,8 @@ const MemberCard = ({ user }) => {
               <Link to={{ pathname: `/users/${user.id}` }}>
                 {name}
               </Link>
+              {' '}
+              {isAdmin && <Label>Admin</Label>}
             </Media.Heading>
             <ul style={{ listStyle: 'none', paddingLeft: '0' }}>
               {details.map(({ data, label }) => (

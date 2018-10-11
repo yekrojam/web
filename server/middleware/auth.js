@@ -77,9 +77,26 @@ function serializeUser(user, next) {
 
 async function deserializeUser(id, next) {
   try {
-    const user = await api(`/user/${id}`, {
+    const query = stringify({
+      populate: 'user',
+      query: JSON.stringify({
+        org: process.env.ORG_ID,
+        user: id,
+      }),
+      select: ['roles', 'user'].join(','),
+    });
+
+    const memberships = await api(`/membership?${query}`, {
       authToken: generateToken({ id }),
     });
+
+    const membership = memberships.length && memberships[0];
+
+    const user = {
+      ...membership.user,
+      roles: membership.roles,
+    };
+
     next(null, user);
   } catch (error) {
     next(error);

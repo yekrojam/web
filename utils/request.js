@@ -1,7 +1,12 @@
 import { getErrorType, getSuccessType } from './actionTypes';
 import api from './api';
 
-export default (url, type, options = {}) => (dispatch, getState) => {
+export default (
+  url,
+  type,
+  options = {},
+  transformData = null,
+) => (dispatch, getState) => {
   dispatch({ type });
 
   const { authToken } = getState().session;
@@ -10,7 +15,7 @@ export default (url, type, options = {}) => (dispatch, getState) => {
     .then((data) => {
       // TODO: Handle 400 errors.
       dispatch({
-        data,
+        data: typeof transformData === 'function' ? transformData(data) : data,
         type: getSuccessType(type),
       });
     })

@@ -1,8 +1,24 @@
 import { find } from 'lodash';
+import { stringify } from 'qs';
 
 import ActionTypes from '../constants/ActionTypes';
 import { getSuccessType } from '../utils/actionTypes';
+import membershipToUser from '../utils/membershipToUser';
 import request from '../utils/request';
+
+function getUserQuery(id = null) {
+  const query = { org: process.env.ORG_ID };
+
+  if (id) {
+    query.user = id;
+  }
+
+  return stringify({
+    populate: 'user',
+    query: JSON.stringify(query),
+    select: ['user', 'roles'].join(','),
+  });
+}
 
 export const createMembership = data => dispatch => (
   dispatch(request('/membership', ActionTypes.MEMBERSHIP_CREATE, {
@@ -45,7 +61,12 @@ export const fetchUser = userId => (dispatch, getState) => {
     return;
   }
 
-  dispatch(request(`/user/${userId}`, type));
+  dispatch(request(
+    `/membership?${getUserQuery(userId)}`,
+    type,
+    {},
+    data => membershipToUser(data.length ? data[0] : data),
+  ));
 };
 
 export const updateUser = data => dispatch => (
@@ -60,7 +81,12 @@ export const fetchOrgs = () => dispatch => (
 );
 
 export const fetchUsers = () => dispatch => (
-  dispatch(request('/user', ActionTypes.USERS_FETCH))
+  dispatch(request(
+    `/membership?${getUserQuery()}`,
+    ActionTypes.USERS_FETCH,
+    {},
+    data => data.map(membershipToUser),
+  ))
 );
 
 export const initializeSession = session => ({

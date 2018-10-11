@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { MenuItem, NavDropdown } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 
@@ -18,6 +18,15 @@ const AccountNavItem = ({ user }) => {
     { label: 'My settings', pathname: '/settings' },
   ];
 
+  const adminMenuItem = user.roles.indexOf('ADMIN') > -1 ?
+    <Fragment>
+      <AppMenuItem to={{ pathname: '/admin' }}>
+        Admin
+      </AppMenuItem>
+      <MenuItem divider />
+    </Fragment> :
+    null;
+
   return (
     <NavDropdown
       className="account-nav-item"
@@ -35,10 +44,7 @@ const AccountNavItem = ({ user }) => {
         </AppMenuItem>
       ))}
       <MenuItem divider />
-      <AppMenuItem to={{ pathname: '/admin' }}>
-        Admin
-      </AppMenuItem>
-      <MenuItem divider />
+      {adminMenuItem}
       <MenuItem href="/logout">
         Sign Out
       </MenuItem>
