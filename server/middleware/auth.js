@@ -1,5 +1,6 @@
 import passport from 'passport';
 import Auth0Strategy from 'passport-auth0';
+import { stringify } from 'qs';
 
 import api from '../../utils/api';
 import generateToken from '../utils/generateToken';
@@ -43,36 +44,26 @@ const authConfig = {
  *  - `profile` has all the information from the user
  */
 async function onVerify(accessToken, refreshToken, extraParams, profile, next) {
-  if (!(profile && profile.id)) {
+  /* eslint-disable-next-line no-underscore-dangle */
+  if (!(profile && profile._json && profile._json.email)) {
     // We didn't get a valid response back from Auth0.
-    throw Error('Auth: Invalid profile.');
+    next('Invalid auth profile.');
+    return;
   }
 
-  const {
-    email,
-    name,
-    nickname,
-    picture,
-    updated_at, /* eslint-disable-line camelcase */
-  } = profile._json; /* eslint-disable-line no-underscore-dangle */
+  /* eslint-disable-next-line no-underscore-dangle */
+  const { email } = profile._json;
 
-  const data = {
-    // Auth0 ids come back in the form of 'type|id', eg:
-    //  - Username/Password: 'auth0|5b3298307ddc051b6f8f7686'
-    //  - Github: 'github|123456'
-    auth: profile.id,
-    email,
-    imageURL: picture,
-    name: name === email ? nickname : name,
-    updatedAt: updated_at,
-  };
+  const query = stringify({
+    query: JSON.stringify({ email }),
+  });
 
   try {
-    const user = await api('/login', {
+    const users = await api(`/user?${query}`, {
       authToken: generateToken({}),
-      method: 'POST',
-      body: JSON.stringify(data),
     });
+
+    const user = users.length && users[0];
 
     next(null, user);
   } catch (error) {
