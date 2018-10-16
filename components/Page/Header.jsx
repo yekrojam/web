@@ -5,13 +5,13 @@ import { Link } from 'react-router-dom';
 
 import AccountNavItem from './AccountNavItem';
 
-import { APP_NAME, AUTH_PATH, HOME_PATH } from '../../constants/app';
+import { AUTH_PATH, HOME_PATH } from '../../constants/app';
 
 /**
  * Header
  */
 const Header = (props) => {
-  const { session: { user } } = props;
+  const { org, session: { user } } = props;
 
   const navItems = user && user.id ?
     <AccountNavItem user={user} /> :
@@ -24,7 +24,7 @@ const Header = (props) => {
       <Navbar.Header>
         <Navbar.Brand>
           <Link to={{ pathname: HOME_PATH }}>
-            {APP_NAME}
+            {org.name}
           </Link>
         </Navbar.Brand>
         <Navbar.Toggle />
@@ -38,6 +38,6 @@ const Header = (props) => {
   );
 };
 
-const mapStateToProps = ({ session }) => ({ session });
+const mapStateToProps = ({ org, session }) => ({ org, session });
 
 export default connect(mapStateToProps)(Header);

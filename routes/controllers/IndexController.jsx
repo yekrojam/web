@@ -1,21 +1,21 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
+import { connect } from 'react-redux';
 
 import BasePage from '../../components/Page/BasePage';
-import { APP_NAME } from '../../constants/app';
 
 /**
  * IndexController
  *
  * The logged-out home page of the app.
  */
-const IndexController = props => (
+const IndexController = ({ org }) => (
   <BasePage className="index" title="Welcome">
     <div className="jumbotron">
       <div className="container">
-        <h1>{APP_NAME}</h1>
+        <h1>{org.name}</h1>
         <p className="lead">
-          Connect yourself.
+          {org.description}
         </p>
         <Button bsSize="large" bsStyle="primary" href="/auth">
           Log In
@@ -25,4 +25,6 @@ const IndexController = props => (
   </BasePage>
 );
 
-export default IndexController;
+const mapStateToProps = ({ org }) => ({ org });
+
+export default connect(mapStateToProps)(IndexController);

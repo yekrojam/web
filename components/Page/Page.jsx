@@ -2,9 +2,9 @@ import cx from 'classnames';
 import React from 'react';
 
 import BasePage from './BasePage';
+import Footer from './Footer';
 import Header from './Header';
 
-import { APP_NAME } from '../../constants/app';
 import './styles/Page.scss';
 
 /**
@@ -16,11 +16,7 @@ const Page = ({ children, className, title }) => (
     <div className="app-content container">
       {children}
     </div>
-    <div className="app-footer">
-      <div className="container">
-        © {APP_NAME} {(new Date()).getFullYear()}
-      </div>
-    </div>
+    <Footer />
   </BasePage>
 );
 
