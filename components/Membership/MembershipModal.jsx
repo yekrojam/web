@@ -7,12 +7,6 @@ import Loader from '../Loader/Loader';
 const exists = value => !!(value && value.trim());
 
 const FIELDS = {
-  org: {
-    error: 'Please select an org.',
-    isValid: exists,
-    label: 'Org',
-    required: true,
-  },
   user: {
     error: 'Please select a user.',
     isValid: exists,

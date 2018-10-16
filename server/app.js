@@ -12,12 +12,13 @@ import sassMiddleware from 'node-sass-middleware';
 import path from 'path';
 import favicon from 'serve-favicon';
 
-import passport from './middleware/auth';
+import passport, { initializeAuth } from './middleware/auth';
 import { handleAppError } from './middleware/errorHandlers';
 import routes from './routes';
-import generateToken from './utils/generateToken';
 
-const PROD = process.env.NODE_ENV === 'production';
+const { COOKIE_SECRET, NODE_ENV } = process.env;
+
+const PROD = NODE_ENV === 'production';
 const PUBLIC_PATH = path.join(__dirname, '../public');
 
 const app = express();
@@ -26,25 +27,18 @@ const app = express();
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser(process.env.COOKIE_SECRET));
+app.use(cookieParser(COOKIE_SECRET));
 app.use(cookieSession({
   // Set a long expiration time so people don't have to login often.
   // https://github.com/expressjs/cookie-session#cookie-options
   expires: moment().add(1, 'year').toDate(),
   name: 'session',
-  secret: process.env.COOKIE_SECRET,
+  secret: COOKIE_SECRET,
 }));
 
 app.use(passport.initialize());
 app.use(passport.session());
-
-// Make the user data and auth token available as part of the session.
-app.use((req, res, next) => {
-  const user = req.user || {};
-  req.session.authToken = generateToken({ id: user.id });
-  req.session.user = user;
-  next();
-});
+app.use(initializeAuth);
 
 app.use(cors({
   origin: true,

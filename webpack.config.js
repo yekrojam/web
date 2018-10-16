@@ -8,7 +8,7 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const path = require('path');
 const webpack = require('webpack');
 
-const { API_URL, NODE_ENV, ORG_ID } = process.env;
+const { API_URL, NODE_ENV } = process.env;
 
 function getFilename(isProd, extension = 'js') {
   return `[name]${isProd ? '-[contenthash:16]' : ''}.${extension}`;
@@ -113,7 +113,6 @@ module.exports = (env, argv) => {
         'process.env': {
           API_URL: JSON.stringify(API_URL),
           NODE_ENV: JSON.stringify(NODE_ENV),
-          ORG_ID: JSON.stringify(ORG_ID),
         },
       }),
       // Don't pull in all of Moment's locales

@@ -8,27 +8,25 @@ import { StaticRouter } from 'react-router-dom';
 
 import App from '../../components/App';
 
-import { initializeSession } from '../../actions';
 import createStore from '../../store';
 import renderHtml from '../utils/renderHtml';
 
 export default (req, res, next) => {
   try {
-    const context = {};
-    const history = createMemoryHistory({ initialEntries: [req.url] });
-    const store = createStore(history, {/* Initial state */});
+    const { authToken, org, user, url } = req;
+    const history = createMemoryHistory({ initialEntries: [url] });
 
-    const user = req.session.user || {};
-
-    // Add session data to the store.
-    store.dispatch(initializeSession({
-      authToken: req.session.authToken || '',
-      user,
-    }));
+    const store = createStore(history, {
+      org: org || {},
+      session: {
+        authToken: authToken || '',
+        user: user || {},
+      },
+    });
 
     const dom = renderToString(
       <Provider store={store}>
-        <StaticRouter context={context} location={req.url}>
+        <StaticRouter context={{}} location={url}>
           <App />
         </StaticRouter>
       </Provider>,

@@ -6,11 +6,11 @@ import { getSuccessType } from '../utils/actionTypes';
 import membershipToUser from '../utils/membershipToUser';
 import request from '../utils/request';
 
-function getUserQuery(id = null) {
-  const query = { org: process.env.ORG_ID };
+function getUserQuery(orgId, userId = null) {
+  const query = { org: orgId };
 
-  if (id) {
-    query.user = id;
+  if (userId) {
+    query.user = userId;
   }
 
   return stringify({
@@ -22,13 +22,6 @@ function getUserQuery(id = null) {
 
 export const createMembership = data => dispatch => (
   dispatch(request('/membership', ActionTypes.MEMBERSHIP_CREATE, {
-    body: JSON.stringify(data),
-    method: 'POST',
-  }))
-);
-
-export const createOrg = data => dispatch => (
-  dispatch(request('/org', ActionTypes.ORG_CREATE, {
     body: JSON.stringify(data),
     method: 'POST',
   }))
@@ -49,9 +42,10 @@ export const deleteUser = userId => dispatch => (
 
 export const fetchUser = userId => (dispatch, getState) => {
   const type = ActionTypes.USER_FETCH;
+  const { org, users } = getState();
 
   // Check if we already have the user.
-  const user = find(getState().users, u => u.id === userId);
+  const user = find(users, u => u.id === userId);
 
   if (user) {
     dispatch({
@@ -62,7 +56,7 @@ export const fetchUser = userId => (dispatch, getState) => {
   }
 
   dispatch(request(
-    `/membership?${getUserQuery(userId)}`,
+    `/membership?${getUserQuery(org.id, userId)}`,
     type,
     {},
     data => membershipToUser(data.length ? data[0] : data),
@@ -76,20 +70,13 @@ export const updateUser = data => dispatch => (
   }))
 );
 
-export const fetchOrgs = () => dispatch => (
-  dispatch(request('/org', ActionTypes.ORGS_FETCH))
-);
+export const fetchUsers = () => (dispatch, getState) => {
+  const { org } = getState();
 
-export const fetchUsers = () => dispatch => (
   dispatch(request(
-    `/membership?${getUserQuery()}`,
+    `/membership?${getUserQuery(org.id)}`,
     ActionTypes.USERS_FETCH,
     {},
     data => data.map(membershipToUser),
-  ))
-);
-
-export const initializeSession = session => ({
-  type: ActionTypes.SESSION_INITIALIZE_SUCCESS,
-  session,
-});
+  ));
+};

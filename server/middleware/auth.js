@@ -4,8 +4,29 @@ import { stringify } from 'qs';
 
 import api from '../../utils/api';
 import generateToken from '../utils/generateToken';
+import membershipToUser from '../../utils/membershipToUser';
 
 import { AUTH_PATH, HOME_PATH } from '../../constants/app';
+
+const { ORG_ID } = process.env;
+
+/**
+ * Generate an auth token for API requests, fetch the org info, and make both
+ * available on the request object.
+ */
+export async function initializeAuth(req, res, next) {
+  const user = req.user || {};
+  const authToken = generateToken({ user: user.id });
+
+  req.authToken = authToken;
+
+  try {
+    req.org = await api(`/org/${ORG_ID}`, { authToken });
+    next();
+  } catch (err) {
+    next(err);
+  }
+}
 
 export function redirectIfAuthenticated(req, res, next) {
   if (!req.isAuthenticated()) {
@@ -80,24 +101,19 @@ async function deserializeUser(id, next) {
     const query = stringify({
       populate: 'user',
       query: JSON.stringify({
-        org: process.env.ORG_ID,
+        org: ORG_ID,
         user: id,
       }),
       select: ['roles', 'user'].join(','),
     });
 
     const memberships = await api(`/membership?${query}`, {
-      authToken: generateToken({ id }),
+      authToken: generateToken({ user: id }),
     });
 
     const membership = memberships.length && memberships[0];
 
-    const user = {
-      ...membership.user,
-      roles: membership.roles,
-    };
-
-    next(null, user);
+    next(null, membershipToUser(membership));
   } catch (error) {
     next(error);
   }

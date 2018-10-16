@@ -7,12 +7,11 @@ import { Link } from 'react-router-dom';
 
 import Loader from '../../components/Loader/Loader';
 import MembershipModal from '../../components/Membership/MembershipModal';
-import OrgModal from '../../components/Org/OrgModal';
 import Page from '../../components/Page/Page';
 import PageHeader from '../../components/Page/PageHeader';
 import UserModal from '../../components/User/UserModal';
 
-import { createMembership, createOrg, createUser, deleteUser, fetchOrgs, fetchUsers, updateUser } from '../../actions';
+import { createMembership, createUser, deleteUser, fetchUsers, updateUser } from '../../actions';
 import ActionTypes from '../../constants/ActionTypes';
 import { UserType } from '../../constants/propTypes';
 import getUserName from '../../utils/getUserName';
@@ -29,20 +28,17 @@ class AdminController extends React.Component {
   state = {
     filter: '',
     membership: null,
-    org: null,
     show: false,
     user: null,
   };
 
   componentDidMount() {
-    this.props.fetchOrgs();
     this.props.fetchUsers();
   }
 
   componentWillReceiveProps(nextProps) {
     const requests = [
       ActionTypes.MEMBERSHIP_CREATE,
-      ActionTypes.ORG_CREATE,
       ActionTypes.USER_CREATE,
       ActionTypes.USER_DELETE,
       ActionTypes.USER_UPDATE,
@@ -55,12 +51,11 @@ class AdminController extends React.Component {
   }
 
   render() {
-    const { orgs, pendingRequests, users } = this.props;
-    const { membership, org, show, user } = this.state;
+    const { pendingRequests, users } = this.props;
+    const { membership, show, user } = this.state;
 
     const isLoading =
       pendingRequests[ActionTypes.MEMBERSHIP_CREATE] ||
-      pendingRequests[ActionTypes.ORG_CREATE] ||
       pendingRequests[ActionTypes.USER_CREATE] ||
       pendingRequests[ActionTypes.USER_DELETE] ||
       pendingRequests[ActionTypes.USER_UPDATE];
@@ -71,9 +66,6 @@ class AdminController extends React.Component {
           <ButtonToolbar>
             <Button onClick={this._handleModalShow}>
               Add User
-            </Button>
-            <Button onClick={this._handleOrgModalShow}>
-              Add Org
             </Button>
             <Button onClick={this._handleMembershipModalShow}>
               Add Membership
@@ -90,17 +82,9 @@ class AdminController extends React.Component {
           isLoading={isLoading}
           onHide={this._handleModalHide}
           onSave={this._handleMembershipSave}
-          orgs={orgs || []}
           membership={membership}
           show={show === 'membership'}
           users={users || []}
-        />
-        <OrgModal
-          isLoading={isLoading}
-          onHide={this._handleModalHide}
-          onSave={this._handleOrgSave}
-          org={org}
-          show={show === 'org'}
         />
         <UserModal
           isLoading={isLoading}
@@ -182,13 +166,6 @@ class AdminController extends React.Component {
     });
   }
 
-  _handleOrgModalShow = (e, org) => {
-    this.setState({
-      org,
-      show: 'org',
-    });
-  }
-
   _handleModalShow = (e, user) => {
     this.setState({
       show: 'user',
@@ -204,11 +181,10 @@ class AdminController extends React.Component {
   }
 
   _handleMembershipSave = (membership) => {
-    this.props.createMembership(membership);
-  }
-
-  _handleOrgSave = (org) => {
-    this.props.createOrg(org);
+    this.props.createMembership({
+      ...membership,
+      org: this.props.org.id,
+    });
   }
 
   _handleSave = (user) => {
@@ -225,18 +201,16 @@ AdminController.propTypes = {
   users: PropTypes.arrayOf(UserType),
 };
 
-const mapStateToProps = ({ orgs, pendingRequests, users }) => ({
-  orgs,
+const mapStateToProps = ({ org, pendingRequests, users }) => ({
+  org,
   pendingRequests,
   users,
 });
 
 const mapDispatchToProps = dispatch => ({
   createMembership: membership => dispatch(createMembership(membership)),
-  createOrg: org => dispatch(createOrg(org)),
   createUser: user => dispatch(createUser(user)),
   deleteUser: userId => dispatch(deleteUser(userId)),
-  fetchOrgs: () => dispatch(fetchOrgs()),
   fetchUsers: () => dispatch(fetchUsers()),
   updateUser: user => dispatch(updateUser(user)),
 });

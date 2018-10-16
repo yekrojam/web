@@ -1,10 +1,9 @@
-import ActionTypes from '../../constants/ActionTypes';
-import { getSuccessType } from '../../utils/actionTypes';
-
+/**
+ * Basic session reducer.
+ * Not used on client since data always comes from the server.
+ */
 export default (state = {}, action) => {
   switch (action.type) {
-    case getSuccessType(ActionTypes.SESSION_INITIALIZE):
-      return action.session;
     default:
       return state;
   }
