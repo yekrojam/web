@@ -3,14 +3,12 @@ import React, { Fragment } from 'react';
 import { Button, ControlLabel, FormControl, FormGroup, HelpBlock, Modal } from 'react-bootstrap';
 
 import Loader from '../Loader/Loader';
-import validate from '../../utils/validate';
-
-const exists = value => !!(value && value.trim());
+import { notBlank, validate } from '../../utils/forms';
 
 const FIELDS = {
   user: {
     error: 'Please select a user.',
-    isValid: exists,
+    isValid: notBlank,
     label: 'User',
     required: true,
   },

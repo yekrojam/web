@@ -1,9 +1,7 @@
 import { expect } from 'chai';
 import { isEmpty } from 'lodash';
 
-import validate from '../validate';
-
-const notBlank = str => !!(str && str.trim());
+import { notBlank, validate } from '../forms';
 
 const FIELDS = {
   name: {
@@ -15,6 +13,14 @@ const FIELDS = {
     isValid: value => notBlank(value) && value.indexOf('@') > -1,
   },
 };
+
+describe('notBlank', () => {
+  it('tests whether a string is blank or not', () => {
+    expect(notBlank('foo')).to.equal(true);
+    expect(notBlank('')).to.equal(false);
+    expect(notBlank('      ')).to.equal(false);
+  });
+});
 
 describe('validate', () => {
   let obj;

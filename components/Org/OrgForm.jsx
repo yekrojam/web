@@ -2,9 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { ControlLabel, FormControl, FormGroup, HelpBlock } from 'react-bootstrap';
 
-import validate from '../../utils/validate';
-
-const notBlank = str => !!(str && str.trim());
+import { notBlank, validate } from '../../utils/forms';
 
 const FIELDS = {
   name: {

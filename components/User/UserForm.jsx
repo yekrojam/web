@@ -3,21 +3,19 @@ import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { Col, ControlLabel, FormControl, FormGroup, HelpBlock, Row } from 'react-bootstrap';
 
-import validate from '../../utils/validate';
+import { notBlank, validate } from '../../utils/forms';
 import { UserType } from '../../constants/propTypes';
-
-const exists = value => !!(value && value.trim());
 
 const FIELDS = {
   name: {
     error: 'Please enter a name.',
-    isValid: exists,
+    isValid: notBlank,
     label: 'Name',
     required: true,
   },
   email: {
     error: 'Please enter a valid email address.',
-    isValid: value => exists(value) && value.indexOf('@') > -1,
+    isValid: value => notBlank && value.indexOf('@') > -1,
     label: 'Email',
     required: true,
   },
