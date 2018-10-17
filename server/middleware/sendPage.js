@@ -1,5 +1,3 @@
-/* eslint-disable react/jsx-filename-extension */
-
 import { createMemoryHistory } from 'history';
 import React from 'react';
 import { renderToString } from 'react-dom/server';

@@ -15,8 +15,13 @@
     }
   },
   "rules": {
-    "no-underscore-dangle": [2, {"allowAfterThis": true}],
-    "no-unused-vars": [2, {"args": "none", "ignoreRestSiblings": true}],
+    "no-underscore-dangle": [2, {
+      "allowAfterThis": true
+    }],
+    "no-unused-vars": [2, {
+      "args": "none",
+      "ignoreRestSiblings": true
+    }],
     "object-curly-newline": [2, {
       "consistent": true,
       "multiline": true,
@@ -26,6 +31,9 @@
     "react/jsx-closing-bracket-location": [2, {
       "nonEmpty": "after-props",
       "selfClosing": "tag-aligned",
+    }],
+    "react/jsx-filename-extension": [2, {
+      "extensions": [".js", ".jsx"]
     }],
     "react/jsx-one-expression-per-line": 0,
     "react/jsx-wrap-multilines": [2, {

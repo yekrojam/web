@@ -1,5 +1,3 @@
-/* eslint-disable react/jsx-filename-extension */
-
 import { ConnectedRouter } from 'connected-react-router';
 import { createBrowserHistory } from 'history';
 import React from 'react';
