@@ -15,7 +15,7 @@ import { createMembership, createUser, deleteUser, fetchUsers, updateUser } from
 import ActionTypes from '../../constants/ActionTypes';
 import { UserType } from '../../constants/propTypes';
 import getUserName from '../../utils/getUserName';
-import requestCompleted from '../../utils/requestCompleted';
+import { isComplete, isPending } from '../../utils/actionTypes';
 
 import './styles/AdminController.scss';
 
@@ -36,8 +36,8 @@ class AdminController extends React.Component {
     this.props.fetchUsers();
   }
 
-  componentWillReceiveProps(nextProps) {
-    const requests = [
+  componentWillReceiveProps({ pendingRequests }) {
+    const types = [
       ActionTypes.MEMBERSHIP_CREATE,
       ActionTypes.USER_CREATE,
       ActionTypes.USER_DELETE,
@@ -45,7 +45,7 @@ class AdminController extends React.Component {
     ];
 
     // TODO: Check for server-side errors and keep the modal open in that case.
-    if (requestCompleted(this.props, nextProps, requests)) {
+    if (isComplete(pendingRequests, types)) {
       this._handleModalHide();
     }
   }
@@ -54,11 +54,12 @@ class AdminController extends React.Component {
     const { pendingRequests, users } = this.props;
     const { membership, show, user } = this.state;
 
-    const isLoading =
-      pendingRequests[ActionTypes.MEMBERSHIP_CREATE] ||
-      pendingRequests[ActionTypes.USER_CREATE] ||
-      pendingRequests[ActionTypes.USER_DELETE] ||
-      pendingRequests[ActionTypes.USER_UPDATE];
+    const isLoading = isPending(pendingRequests, [
+      ActionTypes.MEMBERSHIP_CREATE,
+      ActionTypes.USER_CREATE,
+      ActionTypes.USER_DELETE,
+      ActionTypes.USER_UPDATE,
+    ]);
 
     return (
       <Page className="admin" title="Admin">
