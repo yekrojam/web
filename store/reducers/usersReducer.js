@@ -1,9 +1,13 @@
+// @flow
+
 import { find } from 'lodash';
 
-import ActionTypes from '../../constants/ActionTypes';
 import { getSuccessType } from '../../utils/actionTypes';
 
-const userReducer = (state = {}, action) => {
+import ActionTypes from '../../constants/ActionTypes';
+import { Action, User } from '../../constants/types';
+
+const userReducer = (state: User = {}, action: Action): User => {
   let user;
 
   switch (action.type) {
@@ -18,7 +22,7 @@ const userReducer = (state = {}, action) => {
   }
 };
 
-export default (state = [], action) => {
+export default (state: Array<User> = [], action: Action): Array<User> => {
   let user;
 
   switch (action.type) {

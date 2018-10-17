@@ -1,15 +1,24 @@
+// @flow
+
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
 
 import './Loader.scss';
 
+type Props = {
+  background?: bool,
+  className?: string,
+  full?: bool,
+  size?: 'large' | 'small',
+};
+
 /**
  * Loader.react
  *
  * Displays a loading indicator.
  */
-const Loader = (props) => {
+const Loader = (props: Props) => {
   const { background, size, full, className } = props;
 
   return (

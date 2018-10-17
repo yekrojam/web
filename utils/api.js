@@ -1,10 +1,20 @@
+// @flow
+
 import fetch from 'isomorphic-fetch';
 
-export default (url, { authToken, ...options }) => {
+const API_URL = process.env.API_URL || '';
+
+type Options = {
+  authToken: string,
+};
+
+export default function api(url: string, opts: Options): Promise<Object> {
+  const { authToken, ...options } = opts;
+
   // Normalize url string.
   const urlString = url.indexOf('/') === 0 ? url.replace('/', '') : url;
 
-  return fetch(`${process.env.API_URL}/${urlString}`, {
+  return fetch(`${API_URL}/${urlString}`, {
     headers: {
       Accept: 'application/json',
       'Accept-Encoding': 'gzip',
@@ -14,4 +24,4 @@ export default (url, { authToken, ...options }) => {
     ...options,
   })
     .then(res => res.json());
-};
+}

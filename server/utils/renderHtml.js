@@ -1,10 +1,12 @@
+// @flow
+
 /* eslint-disable-next-line import/no-unresolved */
 import webpackManifest from '../../public/build/webpack-manifest.json';
 
 const chunkManifest = {}; // TODO: Add code-splitting.
 
 /* eslint-disable max-len */
-export default (children, data) => `
+export default (dom: string, data: Object) => `
   <!DOCTYPE html>
   <html>
     <head>
@@ -15,7 +17,7 @@ export default (children, data) => `
       <link rel="stylesheet" type="text/css" href="${webpackManifest['app.css']}" />
     </head>
     <body>
-      <div id="root">${children}</div>
+      <div id="root">${dom}</div>
       <script>window.chunkManifest = ${JSON.stringify(chunkManifest)};</script>
       <script>window.APP_DATA = ${JSON.stringify(data)};</script>
       <script src="${webpackManifest['vendor.js']}"></script>

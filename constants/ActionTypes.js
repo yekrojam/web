@@ -1,3 +1,5 @@
+// @flow
+
 import { createActionTypes } from '../utils/actionTypes';
 
 // TODO: Generate once on app initialization.

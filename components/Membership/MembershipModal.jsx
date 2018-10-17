@@ -5,14 +5,15 @@ import { Button, ControlLabel, FormControl, FormGroup, HelpBlock, Modal } from '
 import Loader from '../Loader/Loader';
 import { notBlank, validate } from '../../utils/forms';
 
-const FIELDS = {
-  user: {
+const FIELDS = [
+  {
     error: 'Please select a user.',
     isValid: notBlank,
     label: 'User',
+    name: 'user',
     required: true,
   },
-};
+];
 
 const getInitialState = props => ({
   errors: {},
@@ -28,14 +29,13 @@ class MembershipModal extends React.Component {
     const contents = isLoading ?
       <Loader /> :
       <Fragment>
-        {Object.keys(FIELDS).map((name) => {
+        {FIELDS.map(({ label, name }) => {
           const error = this.state.errors[name];
-          const field = FIELDS[name];
           const options = this.props[`${name}s`];
 
           return (
             <FormGroup key={name} validationState={error ? 'error' : null}>
-              <ControlLabel>{field.label}</ControlLabel>
+              <ControlLabel>{label}</ControlLabel>
               <FormControl
                 componentClass="select"
                 name={name}

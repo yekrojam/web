@@ -3,16 +3,18 @@ import { isEmpty } from 'lodash';
 
 import { notBlank, validate } from '../forms';
 
-const FIELDS = {
-  name: {
+const FIELDS = [
+  {
     error: 'Please enter a name.',
     isValid: notBlank,
+    name: 'name',
   },
-  email: {
+  {
     error: 'Please enter a valid email address.',
     isValid: value => notBlank(value) && value.indexOf('@') > -1,
+    name: 'email',
   },
-};
+];
 
 describe('notBlank', () => {
   it('tests whether a string is blank or not', () => {

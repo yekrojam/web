@@ -1,3 +1,5 @@
+// @flow
+
 import Admin from './controllers/AdminController';
 import Home from './controllers/HomeController';
 import Index from './controllers/IndexController';

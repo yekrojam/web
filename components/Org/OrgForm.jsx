@@ -4,41 +4,43 @@ import { ControlLabel, FormControl, FormGroup, HelpBlock } from 'react-bootstrap
 
 import { notBlank, validate } from '../../utils/forms';
 
-const FIELDS = {
-  name: {
+const FIELDS = [
+  {
     error: 'Please enter a name.',
     isValid: notBlank,
     label: 'Name',
+    name: 'name',
     required: true,
   },
-  description: {
+  {
     error: 'Please enter a description.',
     isValid: notBlank,
     label: 'Description',
+    name: 'description',
     required: true,
     props: {
       componentClass: 'textarea',
       placeholder: 'Enter a description...',
     },
   },
-  urlSlug: {
+  {
     error: 'Please enter a URL slug.',
     isValid: notBlank,
     label: 'URL Slug',
+    name: 'urlSlug',
     required: true,
   },
-};
+];
 
 const OrgForm = ({ errors, onChange, org }) => (
   <Fragment>
-    {Object.keys(FIELDS).map((name) => {
+    {FIELDS.map(({ label, name, props }) => {
       const error = errors[name];
-      const field = FIELDS[name];
-      const fieldProps = field.props || {};
+      const fieldProps = props || {};
 
       return (
         <FormGroup key={name} validationState={error ? 'error' : null}>
-          <ControlLabel>{field.label}</ControlLabel>
+          <ControlLabel>{label}</ControlLabel>
           <FormControl
             {...fieldProps}
             name={name}
