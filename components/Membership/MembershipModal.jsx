@@ -3,6 +3,7 @@ import React, { Fragment } from 'react';
 import { Button, ControlLabel, FormControl, FormGroup, HelpBlock, Modal } from 'react-bootstrap';
 
 import Loader from '../Loader/Loader';
+import validate from '../../utils/validate';
 
 const exists = value => !!(value && value.trim());
 
@@ -129,13 +130,7 @@ class MembershipModal extends React.Component {
     const { membership } = this.state;
 
     // Basic client-side validation.
-    const errors = {};
-    Object.keys(FIELDS).forEach((name) => {
-      const field = FIELDS[name];
-      if (field.isValid && !field.isValid(membership[name])) {
-        errors[name] = field.error;
-      }
-    });
+    const errors = validate(membership, FIELDS);
 
     if (!isEmpty(errors)) {
       this.setState({ errors });

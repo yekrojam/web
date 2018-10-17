@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { Col, ControlLabel, FormControl, FormGroup, HelpBlock, Row } from 'react-bootstrap';
 
+import validate from '../../utils/validate';
 import { UserType } from '../../constants/propTypes';
 
 const exists = value => !!(value && value.trim());
@@ -115,16 +116,7 @@ const UserForm = ({ errors, onChange, user }) => (
   </Fragment>
 );
 
-UserForm.validate = (user) => {
-  const errors = {};
-  Object.keys(FIELDS).forEach((name) => {
-    const field = FIELDS[name];
-    if (field.isValid && !field.isValid(user[name])) {
-      errors[name] = field.error;
-    }
-  });
-  return errors;
-};
+UserForm.validate = user => validate(user, FIELDS);
 
 UserForm.propTypes = {
   /* eslint-disable-next-line react/forbid-prop-types */

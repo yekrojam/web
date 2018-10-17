@@ -1,35 +1,9 @@
 import { isEmpty } from 'lodash';
-import React, { Fragment } from 'react';
-import { Button, ControlLabel, FormControl, FormGroup, HelpBlock, Modal } from 'react-bootstrap';
+import React from 'react';
+import { Button, Modal } from 'react-bootstrap';
 
 import Loader from '../Loader/Loader';
-
-const exists = value => !!(value && value.trim());
-
-const FIELDS = {
-  name: {
-    error: 'Please enter a name.',
-    isValid: exists,
-    label: 'Name',
-    required: true,
-  },
-  description: {
-    error: 'Please enter a description.',
-    isValid: exists,
-    label: 'Description',
-    required: true,
-    props: {
-      componentClass: 'textarea',
-      placeholder: 'Enter a description...',
-    },
-  },
-  urlSlug: {
-    error: 'Please enter a URL slug.',
-    isValid: exists,
-    label: 'URL Slug',
-    required: true,
-  },
-};
+import OrgForm from './OrgForm';
 
 const getInitialState = props => ({
   errors: {},
@@ -44,25 +18,10 @@ class OrgModal extends React.Component {
 
     const contents = isLoading ?
       <Loader /> :
-      <Fragment>
-        {Object.keys(FIELDS).map((name) => {
-          const error = this.state.errors[name];
-          const field = FIELDS[name];
-          const props = field.props || {};
-
-          return (
-            <FormGroup key={name} validationState={error ? 'error' : null}>
-              <ControlLabel>{field.label}</ControlLabel>
-              <FormControl
-                {...props}
-                name={name}
-                onChange={this._handleChange}
-              />
-              {error ? <HelpBlock>{error}</HelpBlock> : null}
-            </FormGroup>
-          );
-        })}
-      </Fragment>;
+      <OrgForm
+        {...this.state}
+        onChange={this._handleChange}
+      />;
 
     return (
       <Modal
@@ -113,15 +72,7 @@ class OrgModal extends React.Component {
 
   _handleSave = (e) => {
     const { org } = this.state;
-
-    // Basic client-side validation.
-    const errors = {};
-    Object.keys(FIELDS).forEach((name) => {
-      const field = FIELDS[name];
-      if (field.isValid && !field.isValid(org[name])) {
-        errors[name] = field.error;
-      }
-    });
+    const errors = OrgForm.validate(org);
 
     if (!isEmpty(errors)) {
       this.setState({ errors });
