@@ -6,9 +6,49 @@ import api from '../../utils/api';
 import generateToken from '../utils/generateToken';
 import membershipToUser from '../../utils/membershipToUser';
 
-import { AUTH_PATH, HOME_PATH } from '../../constants/app';
+import { AUTH_PATH, HOME_PATH, INDEX_PATH } from '../../constants/app';
 
-const { ORG_ID } = process.env;
+const { AUTH0_CALLBACK_URL, ORG_ID } = process.env;
+
+/**
+ * Handle user authentication on a per-route basis all in one place.
+ */
+export function checkAuth(req, res, next) {
+  const isAuthenticated = req.isAuthenticated();
+  let redirectPath;
+
+  switch (req.baseUrl + req.path) {
+    // Just log the user out and redirect to the index page.
+    case '/logout':
+      req.logout();
+      redirectPath = INDEX_PATH;
+      break;
+
+    // Only accessible when user is logged out.
+    case AUTH_PATH:
+    case INDEX_PATH:
+    case AUTH0_CALLBACK_URL:
+      if (isAuthenticated) {
+        redirectPath = HOME_PATH;
+      }
+      break;
+
+    // Require user to be logged in for any other path.
+    default:
+      if (!isAuthenticated) {
+        // Remember where the user is going before sending to the login screen.
+        req.session.redirectPath = req.url;
+        redirectPath = AUTH_PATH;
+      }
+      break;
+  }
+
+  if (redirectPath) {
+    res.redirect(redirectPath);
+  } else {
+    next();
+  }
+}
 
 /**
  * Generate an auth token for API requests, fetch the org info, and make both
@@ -25,24 +65,6 @@ export async function initializeAuth(req, res, next) {
     next();
   } catch (err) {
     next(err);
-  }
-}
-
-export function redirectIfAuthenticated(req, res, next) {
-  if (!req.isAuthenticated()) {
-    next();
-  } else {
-    res.redirect(HOME_PATH);
-  }
-}
-
-export function requireAuthentication(req, res, next) {
-  if (req.isAuthenticated()) {
-    next();
-  } else {
-    // Remember where the user is going before sending to the login screen.
-    req.session.redirectPath = req.url;
-    res.redirect(AUTH_PATH);
   }
 }
 
