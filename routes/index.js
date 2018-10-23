@@ -7,33 +7,46 @@ import NotFound from './controllers/NotFoundController';
 import Profile from './controllers/ProfileController';
 import Settings from './controllers/SettingsController';
 
-import { HOME_PATH, INDEX_PATH } from '../constants/app';
+import isAdmin from '../utils/isAdmin';
 
-export default [
-  {
-    path: INDEX_PATH,
-    component: Index,
-    exact: true,
-  },
-  {
-    path: HOME_PATH,
-    component: Home,
-    exact: true,
-  },
-  {
-    path: '/users/:userId',
-    component: Profile,
-  },
-  {
-    path: '/settings',
-    component: Settings,
-  },
-  {
-    path: '/admin',
-    component: Admin,
-  },
-  {
+import { HOME_PATH, INDEX_PATH } from '../constants/app';
+import { User } from '../constants/types';
+
+export default function getRoutes(user: User) {
+  const routes = [
+    {
+      path: INDEX_PATH,
+      component: Index,
+      exact: true,
+    },
+    {
+      path: HOME_PATH,
+      component: Home,
+      exact: true,
+    },
+    {
+      path: '/users/:userId',
+      component: Profile,
+    },
+    {
+      path: '/settings',
+      component: Settings,
+    },
+  ];
+
+  // Non-admins will just see the 404 page.
+  if (isAdmin(user)) {
+    routes.push({
+      path: '/admin',
+      component: Admin,
+    });
+  }
+
+  // This must come last.
+  routes.push({
     path: '*',
     component: NotFound,
-  },
-];
+  });
+
+  return routes;
+}
