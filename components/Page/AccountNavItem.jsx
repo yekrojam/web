@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import { MenuItem, NavDropdown } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 
+import isAdmin from '../../utils/isAdmin';
 import { UserType } from '../../constants/propTypes';
 
 import './styles/AccountNavItem.scss';
@@ -18,7 +19,7 @@ const AccountNavItem = ({ user }) => {
     { label: 'My settings', pathname: '/settings' },
   ];
 
-  const adminMenuItem = user.roles.indexOf('ADMIN') > -1 ?
+  const adminMenuItem = isAdmin(user) ?
     <Fragment>
       <AppMenuItem to={{ pathname: '/admin' }}>
         Admin
