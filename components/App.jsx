@@ -4,15 +4,18 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 
+import ErrorBoundary from './ErrorBoundary';
 import getRoutes from '../routes';
 
 const App = ({ user }) => {
   const routes = getRoutes(user);
 
   return (
-    <Switch>
-      {routes.map(route => <Route key={route.path} {...route} />)}
-    </Switch>
+    <ErrorBoundary>
+      <Switch>
+        {routes.map(route => <Route key={route.path} {...route} />)}
+      </Switch>
+    </ErrorBoundary>
   );
 };
 
