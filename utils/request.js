@@ -16,7 +16,6 @@ export default function request(
 
     api(url, { ...options, authToken })
       .then((data) => {
-        // TODO: Handle 400 errors.
         dispatch({
           data: transformData ? transformData(data) : data,
           type: getSuccessType(type),
