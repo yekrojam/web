@@ -29,6 +29,13 @@ export const createMembership =
     }))
   );
 
+export const updateOrg = (data: Object) => (dispatch: Function): void => (
+  dispatch(request(`/org/${data.id}`, ActionTypes.ORG_UPDATE, {
+    body: JSON.stringify(data),
+    method: 'PATCH',
+  }))
+);
+
 export const createUser = (data: Object) => (dispatch: Function): void => (
   dispatch(request('/user', ActionTypes.USER_CREATE, {
     body: JSON.stringify(data),

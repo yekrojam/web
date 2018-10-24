@@ -45,6 +45,7 @@ const OrgForm = ({ errors, onChange, org }) => (
             {...fieldProps}
             name={name}
             onChange={onChange}
+            value={org[name] || ''}
           />
           {error ? <HelpBlock>{error}</HelpBlock> : null}
         </FormGroup>
