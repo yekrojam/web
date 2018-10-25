@@ -37,10 +37,10 @@ class SettingsController extends React.Component {
   }
 
   render() {
-    const { pendingRequests, user } = this.props;
+    const { requests, user } = this.props;
     const title = 'Settings';
 
-    const isLoading = isEmpty(user) || pendingRequests[ActionTypes.USERS_FETCH];
+    const isLoading = isEmpty(user) || requests[ActionTypes.USERS_FETCH];
 
     const contents = isLoading ?
       <Loader /> :
@@ -96,10 +96,10 @@ SettingsController.propTypes = {
 };
 
 const mapStateToProps = (state, props) => {
-  const { pendingRequests, session, users } = state;
+  const { requests, session, users } = state;
 
   return {
-    pendingRequests,
+    requests,
     session,
     user: find(users, user => user.id === session.user.id),
   };

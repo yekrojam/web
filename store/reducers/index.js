@@ -6,12 +6,13 @@ import org from './orgsReducer';
 import session from './sessionReducer';
 import users from './usersReducer';
 
-import { reducer as pendingRequests } from '../../utils/actionTypes';
+import { errorsReducer, requestsReducer } from '../../utils/actionTypes';
 import ActionTypes from '../../constants/ActionTypes';
 
 export default combineReducers({
+  errors: errorsReducer(ActionTypes),
   org,
-  pendingRequests: pendingRequests(ActionTypes),
+  requests: requestsReducer(ActionTypes),
   session,
   users,
 });

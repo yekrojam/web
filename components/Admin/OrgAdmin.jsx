@@ -16,8 +16,8 @@ class OrgAdmin extends React.Component {
   };
 
   render() {
-    const { org, pendingRequests } = this.props;
-    const isLoading = isEmpty(org) || pendingRequests[ActionTypes.ORG_UPDATE];
+    const { org, requests } = this.props;
+    const isLoading = isEmpty(org) || requests[ActionTypes.ORG_UPDATE];
 
     return (
       <Fragment>
@@ -63,9 +63,9 @@ class OrgAdmin extends React.Component {
   }
 }
 
-const mapStateToProps = ({ org, pendingRequests }) => ({
+const mapStateToProps = ({ org, requests }) => ({
   org,
-  pendingRequests,
+  requests,
 });
 
 const mapDispatchToProps = dispatch => ({

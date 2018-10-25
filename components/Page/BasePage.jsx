@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
 
+import AppAlert from '../AppAlert/AppAlert';
+import { clearErrors } from '../../utils/actionTypes';
+
 /**
  * BasePage
  *
@@ -23,9 +26,18 @@ class BasePage extends React.Component {
   }
 
   render() {
+    const { children, className, errors } = this.props;
+    const messages = Object.keys(errors).map(e => errors[e].message);
+
     return (
-      <div className={cx('app', this.props.className)}>
-        {this.props.children}
+      <div className={cx('app', className)}>
+        {children}
+        <AppAlert
+          bsStyle="danger"
+          onHide={this.props.clearErrors}
+          show={!!messages.length}>
+          {messages}
+        </AppAlert>
       </div>
     );
   }
@@ -40,8 +52,13 @@ BasePage.propTypes = {
   title: PropTypes.string.isRequired,
 };
 
-const mapStateToProps = ({ org }) => ({
+const mapStateToProps = ({ errors, org }) => ({
+  errors,
   org,
 });
 
-export default connect(mapStateToProps)(BasePage);
+const mapDispatchToProps = dispatch => ({
+  clearErrors: () => dispatch(clearErrors()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(BasePage);

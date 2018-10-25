@@ -83,10 +83,10 @@ class HomeController extends React.Component {
   }
 
   _renderContents = () => {
-    const { pendingRequests, users } = this.props;
+    const { requests, users } = this.props;
     const filter = this.state.filter.toLowerCase();
 
-    if (isEmpty(users) || pendingRequests[ActionTypes.USERS_FETCH]) {
+    if (isEmpty(users) || requests[ActionTypes.USERS_FETCH]) {
       return <Loader />;
     }
 
@@ -116,8 +116,8 @@ HomeController.propTypes = {
   users: PropTypes.arrayOf(UserType),
 };
 
-const mapStateToProps = ({ pendingRequests, users }) => ({
-  pendingRequests,
+const mapStateToProps = ({ requests, users }) => ({
+  requests,
   users,
 });
 

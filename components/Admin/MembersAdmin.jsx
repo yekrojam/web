@@ -28,7 +28,7 @@ class MembersAdmin extends React.Component {
     this.props.fetchUsers();
   }
 
-  componentWillReceiveProps({ pendingRequests }) {
+  componentWillReceiveProps({ requests }) {
     const types = [
       ActionTypes.MEMBERSHIP_CREATE,
       ActionTypes.USER_CREATE,
@@ -37,16 +37,16 @@ class MembersAdmin extends React.Component {
     ];
 
     // TODO: Check for server-side errors and keep the modal open in that case.
-    if (isComplete(pendingRequests, types)) {
+    if (isComplete(requests, types)) {
       this._handleModalHide();
     }
   }
 
   render() {
-    const { pendingRequests, users } = this.props;
+    const { requests, users } = this.props;
     const { membership, show, user } = this.state;
 
-    const isLoading = isPending(pendingRequests, [
+    const isLoading = isPending(requests, [
       ActionTypes.MEMBERSHIP_CREATE,
       ActionTypes.USER_CREATE,
       ActionTypes.USER_DELETE,
@@ -92,9 +92,9 @@ class MembersAdmin extends React.Component {
   }
 
   _renderContents = () => {
-    const { pendingRequests, users } = this.props;
+    const { requests, users } = this.props;
 
-    if (isEmpty(users) || pendingRequests[ActionTypes.USERS_FETCH]) {
+    if (isEmpty(users) || isPending(requests, ActionTypes.USERS_FETCH)) {
       return <Loader />;
     }
 
@@ -194,9 +194,9 @@ MembersAdmin.propTypes = {
   users: PropTypes.arrayOf(UserType),
 };
 
-const mapStateToProps = ({ org, pendingRequests, users }) => ({
+const mapStateToProps = ({ org, requests, users }) => ({
   org,
-  pendingRequests,
+  requests,
   users,
 });
 

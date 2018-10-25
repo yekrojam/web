@@ -38,9 +38,9 @@ class ProfileController extends React.Component {
   }
 
   _renderContents = () => {
-    const { pendingRequests, user } = this.props;
+    const { requests, user } = this.props;
 
-    if (isEmpty(user) || pendingRequests[ActionTypes.USERS_FETCH]) {
+    if (isEmpty(user) || requests[ActionTypes.USERS_FETCH]) {
       return <Loader />;
     }
 
@@ -116,11 +116,11 @@ ProfileController.propTypes = {
 };
 
 const mapStateToProps = (state, props) => {
-  const { pendingRequests, users } = state;
+  const { requests, users } = state;
   const { match: { params } } = props;
 
   return {
-    pendingRequests,
+    requests,
     user: find(users, user => user.id === params.userId),
   };
 };

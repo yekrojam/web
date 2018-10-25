@@ -4,6 +4,9 @@ import { Action } from '../constants/types';
 
 type Types = string | Array<string>;
 
+const CLEAR_ERRORS = 'CLEAR_ERRORS';
+
+// Util Functions
 export function getBaseType(type: string): string {
   return type.replace('_ERROR', '').replace('_SUCCESS', '');
 }
@@ -18,6 +21,10 @@ export function getSuccessType(type: string): string {
 
 export function isBaseType(type: string): bool {
   return type.indexOf('ERROR') === -1 && type.indexOf('SUCCESS') === -1;
+}
+
+export function isErrorType(type: string): bool {
+  return type.indexOf('ERROR') > -1;
 }
 
 export function isComplete(requests: Object, types: Types): bool {
@@ -42,7 +49,34 @@ export function createActionTypes(types: Array<string>): Object {
   }), {});
 }
 
-export function reducer(types: Object = {}): Function {
+// Actions
+export const clearErrors = () => (dispatch: Function): void => dispatch({
+  type: CLEAR_ERRORS,
+});
+
+// Reducers
+export function errorsReducer(types: Object = {}): Function {
+  return (state: Object = {}, action: Action): Object => {
+    const { error, type } = action;
+
+    // Reset state.
+    if (type === CLEAR_ERRORS) {
+      return {};
+    }
+
+    // Ignore any actions that are not whitelisted or are not errors.
+    if (!(types[type] && isErrorType(type))) {
+      return state;
+    }
+
+    return {
+      ...state,
+      [getBaseType(type)]: error,
+    };
+  };
+}
+
+export function requestsReducer(types: Object = {}): Function {
   return (state: Object = {}, action: Action): Object => {
     const { type } = action;
 
