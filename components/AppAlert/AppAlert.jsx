@@ -9,7 +9,7 @@ import './AppAlert.scss';
 type Props = {
   bsStyle: ?string,
   children: ?any,
-  className: ?string,
+  className?: string,
   onHide: Function,
   show: bool,
 };

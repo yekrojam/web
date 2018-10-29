@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react';
 import { Nav, Navbar, NavItem } from 'react-bootstrap';
 import { connect } from 'react-redux';
@@ -6,11 +8,17 @@ import { Link } from 'react-router-dom';
 import AccountNavItem from './AccountNavItem';
 
 import { AUTH_PATH, HOME_PATH } from '../../constants/app';
+import { Org, Session } from '../../constants/types';
+
+type Props = {
+  org: Org,
+  session: Session,
+};
 
 /**
  * Header
  */
-const Header = (props) => {
+const Header = (props: Props) => {
   const { org, session: { user } } = props;
 
   const navItems = user && user.id ?

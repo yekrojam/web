@@ -1,5 +1,6 @@
+// @flow
+
 import { isEmpty } from 'lodash';
-import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { Button, ButtonToolbar, FormControl, Label, Table } from 'react-bootstrap';
 import { connect } from 'react-redux';
@@ -11,12 +12,28 @@ import PageHeader from '../Page/PageHeader';
 import UserModal from '../User/UserModal';
 
 import { createMember, deleteUser, fetchMembers, updateUser } from '../../actions';
-import ActionTypes from '../../constants/ActionTypes';
-import { UserType } from '../../constants/propTypes';
 import { getUserName } from '../../utils/userUtils';
 import { isComplete, isPending } from '../../utils/actionTypes';
 
-class MembersAdmin extends React.Component {
+import ActionTypes from '../../constants/ActionTypes';
+import { User } from '../../constants/types';
+
+type Props = {
+  createMember: Function,
+  deleteUser: Function,
+  fetchMembers: Function,
+  requests: Object,
+  users: Array<User>,
+  updateUser: Function,
+};
+
+type State = {
+  filter: string,
+  show: bool,
+  user: ?User,
+};
+
+class MembersAdmin extends React.Component<Props, State> {
   state = {
     filter: '',
     show: false,
@@ -171,12 +188,7 @@ class MembersAdmin extends React.Component {
   }
 }
 
-MembersAdmin.propTypes = {
-  users: PropTypes.arrayOf(UserType),
-};
-
-const mapStateToProps = ({ org, requests, users }) => ({
-  org,
+const mapStateToProps = ({ requests, users }) => ({
   requests,
   users,
 });

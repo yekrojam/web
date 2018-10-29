@@ -1,12 +1,10 @@
 // @flow
 
 import { range } from 'lodash';
-import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { Col, ControlLabel, FormControl, FormGroup, HelpBlock, Row } from 'react-bootstrap';
 
 import { notBlank, validate } from '../../utils/forms';
-import { UserType } from '../../constants/propTypes';
 import { Field, Member } from '../../constants/types';
 
 type Props = {
@@ -131,12 +129,5 @@ const UserForm = (props: Props) => {
 UserForm.validate = (data: Object, extraFields: Array<Field> = []) => (
   validate(data, FIELDS.concat(extraFields))
 );
-
-UserForm.propTypes = {
-  /* eslint-disable-next-line react/forbid-prop-types */
-  errors: PropTypes.object.isRequired,
-  onChange: PropTypes.func.isRequired,
-  user: UserType.isRequired,
-};
 
 export default UserForm;

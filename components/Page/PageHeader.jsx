@@ -1,6 +1,13 @@
+// @flow
+
 import React from 'react';
 
-const PageHeader = props => (
+type Props = {
+  children?: any,
+  title: string,
+};
+
+const PageHeader = (props: Props) => (
   <div className="app-page-header">
     <h1 className="app-page-header-title">
       {props.title}

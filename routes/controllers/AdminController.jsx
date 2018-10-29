@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react';
 import { Col, Nav, NavItem, Row } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
@@ -9,12 +11,21 @@ import MembersAdmin from '../../components/Admin/MembersAdmin';
 
 import './styles/AdminController.scss';
 
+type Props = {
+  match: {
+    path: string,
+    url: string,
+  },
+};
+
+const isActive = (match, location) => match && match.url === location.pathname;
+
 /**
  * AdminController
  *
  * Admin dashboard for adding, editing, and removing users and permissions.
  */
-const AdminController = (props) => {
+const AdminController = (props: Props) => {
   const { path, url } = props.match;
   const routes = [
     {
@@ -22,8 +33,8 @@ const AdminController = (props) => {
       component: OrgAdmin,
       exact: true,
       item: {
+        isActive,
         label: 'Org',
-        isActive: (match, location) => match.url === location.pathname,
         pathname: url,
       },
     },
@@ -31,6 +42,7 @@ const AdminController = (props) => {
       path: `${path}/members`,
       component: MembersAdmin,
       item: {
+        isActive,
         label: 'Members',
         pathname: `${url}/members`,
       },
@@ -42,9 +54,9 @@ const AdminController = (props) => {
       <Row>
         <Col md={2}>
           <Nav bsStyle="pills" stacked>
-            {routes.map(({ item: { isActive, label, pathname } }) => (
+            {routes.map(({ item: { label, pathname, ...rest } }) => (
               <LinkContainer
-                isActive={isActive}
+                isActive={rest.isActive}
                 key={pathname}
                 to={{ pathname }}>
                 <NavItem>{label}</NavItem>

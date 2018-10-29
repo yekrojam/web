@@ -1,3 +1,5 @@
+// @flow
+
 import { isEmpty } from 'lodash';
 import React from 'react';
 import { Button, Modal } from 'react-bootstrap';
@@ -5,12 +7,28 @@ import { Button, Modal } from 'react-bootstrap';
 import Loader from '../Loader/Loader';
 import OrgForm from './OrgForm';
 
+import { Org } from '../../constants/types';
+
+type Props = {
+  isLoading: bool,
+  onDelete: Function,
+  onHide: Function,
+  onSave: Function,
+  show: bool,
+  org?: Org,
+};
+
+type State = {
+  errors: Object,
+  org: Org | {},
+};
+
 const getInitialState = props => ({
   errors: {},
   org: props.org || {},
 });
 
-class OrgModal extends React.Component {
+class OrgModal extends React.Component<Props, State> {
   state = getInitialState(this.props);
 
   render() {
@@ -55,7 +73,7 @@ class OrgModal extends React.Component {
     );
   }
 
-  _handleChange = (e) => {
+  _handleChange = (e: { target: HTMLInputElement }) => {
     const { name, value } = e.target;
 
     this.setState((state, props) => ({
@@ -66,11 +84,11 @@ class OrgModal extends React.Component {
     }));
   }
 
-  _handleEnter = (e) => {
+  _handleEnter = () => {
     this.setState(getInitialState(this.props));
   }
 
-  _handleSave = (e) => {
+  _handleSave = () => {
     const { org } = this.state;
     const errors = OrgForm.validate(org);
 

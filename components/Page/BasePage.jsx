@@ -1,10 +1,25 @@
+// @flow
+
 import cx from 'classnames';
-import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
 
 import AppAlert from '../AppAlert/AppAlert';
 import { clearErrors } from '../../utils/actionTypes';
+
+import { Org } from '../../constants/types';
+
+type ReduxProps = {
+  clearErrors: Function,
+  errors: Object,
+  org: Org,
+};
+
+type Props = ReduxProps & {
+  children: any,
+  className?: string,
+  title: string,
+};
 
 /**
  * BasePage
@@ -12,7 +27,7 @@ import { clearErrors } from '../../utils/actionTypes';
  * Base component for rendering a page, including code that should execute on
  * every page.
  */
-class BasePage extends React.Component {
+class BasePage extends React.Component<Props> {
   componentDidMount() {
     // Set the browser page title.
     this._setTitle();
@@ -47,10 +62,6 @@ class BasePage extends React.Component {
     document.title = title ? `${org.name} \u00b7 ${title}` : org.name;
   }
 }
-
-BasePage.propTypes = {
-  title: PropTypes.string.isRequired,
-};
 
 const mapStateToProps = ({ errors, org }) => ({
   errors,

@@ -1,58 +1,29 @@
+// @flow
+
 import { isEmpty } from 'lodash';
-import PropTypes from 'prop-types';
 import React from 'react';
-import { Col, FormControl, Label, Media, Panel, Row } from 'react-bootstrap';
+import { Col, FormControl, Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 
 import Loader from '../../components/Loader/Loader';
-import MemberImage from '../../components/User/MemberImage';
+import MemberCard from '../../components/User/MemberCard';
 import Page from '../../components/Page/Page';
 import PageHeader from '../../components/Page/PageHeader';
 
 import { fetchMembers } from '../../actions';
-import ActionTypes from '../../constants/ActionTypes';
-import { UserType } from '../../constants/propTypes';
 import { getUserName } from '../../utils/userUtils';
 
-const MemberCard = ({ user }) => {
-  const isAdmin = user.roles.indexOf('ADMIN') > -1;
-  const name = getUserName(user);
+import ActionTypes from '../../constants/ActionTypes';
+import { User } from '../../constants/types';
 
-  const details = [
-    { data: user.email, label: 'Email' },
-    { data: user.phone, label: 'Phone' },
-  ];
+type Props = {
+  fetchMembers: Function,
+  requests: Object,
+  users: Array<User>,
+};
 
-  return (
-    <Panel className="user-card">
-      <Panel.Body>
-        <Media>
-          <Media.Left>
-            <MemberImage user={user} />
-          </Media.Left>
-          <Media.Body>
-            <Media.Heading>
-              <Link to={{ pathname: `/users/${user.id}` }}>
-                {name}
-              </Link>
-              {' '}
-              {isAdmin && <Label>Admin</Label>}
-            </Media.Heading>
-            <ul style={{ listStyle: 'none', paddingLeft: '0' }}>
-              {details.map(({ data, label }) => (
-                data ?
-                  <li key={data}>
-                    <strong> {label}:</strong> {data}
-                  </li> :
-                  null
-              ))}
-            </ul>
-          </Media.Body>
-        </Media>
-      </Panel.Body>
-    </Panel>
-  );
+type State = {
+  filter: string,
 };
 
 /**
@@ -60,8 +31,10 @@ const MemberCard = ({ user }) => {
  *
  * The logged-in homepage for the app.
  */
-class HomeController extends React.Component {
-  state = { filter: '' }
+class HomeController extends React.Component<Props, State> {
+  state = {
+    filter: '',
+  };
 
   componentDidMount() {
     this.props.fetchMembers();
@@ -112,10 +85,6 @@ class HomeController extends React.Component {
     this.setState({ filter: e.target.value });
   }
 }
-
-HomeController.propTypes = {
-  users: PropTypes.arrayOf(UserType),
-};
 
 const mapStateToProps = ({ requests, users }) => ({
   requests,

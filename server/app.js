@@ -1,3 +1,5 @@
+// @flow
+
 import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import cookieSession from 'cookie-session';

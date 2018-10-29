@@ -1,8 +1,16 @@
-import PropTypes from 'prop-types';
+// @flow
+
 import React, { Fragment } from 'react';
 import { ControlLabel, FormControl, FormGroup, HelpBlock } from 'react-bootstrap';
 
 import { notBlank, validate } from '../../utils/forms';
+import { Org } from '../../constants/types';
+
+type Props = {
+  errors: Object,
+  onChange: Function,
+  org: Org,
+};
 
 const FIELDS = [
   {
@@ -18,7 +26,7 @@ const FIELDS = [
     label: 'Description',
     name: 'description',
     required: true,
-    props: {
+    fieldProps: {
       componentClass: 'textarea',
       placeholder: 'Enter a description...',
     },
@@ -32,36 +40,32 @@ const FIELDS = [
   },
 ];
 
-const OrgForm = ({ errors, onChange, org }) => (
-  <Fragment>
-    {FIELDS.map(({ label, name, props }) => {
-      const error = errors[name];
-      const fieldProps = props || {};
+const OrgForm = (props: Props) => {
+  const { errors, onChange, org } = props;
 
-      return (
-        <FormGroup key={name} validationState={error ? 'error' : null}>
-          <ControlLabel>{label}</ControlLabel>
-          <FormControl
-            {...fieldProps}
-            name={name}
-            onChange={onChange}
-            value={org[name] || ''}
-          />
-          {error ? <HelpBlock>{error}</HelpBlock> : null}
-        </FormGroup>
-      );
-    })}
-  </Fragment>
-);
+  return (
+    <Fragment>
+      {FIELDS.map(({ label, name, ...rest }) => {
+        const error = errors[name];
+        const fieldProps = rest.fieldProps || {};
+
+        return (
+          <FormGroup key={name} validationState={error ? 'error' : null}>
+            <ControlLabel>{label}</ControlLabel>
+            <FormControl
+              {...fieldProps}
+              name={name}
+              onChange={onChange}
+              value={org[name] || ''}
+            />
+            {error ? <HelpBlock>{error}</HelpBlock> : null}
+          </FormGroup>
+        );
+      })}
+    </Fragment>
+  );
+};
 
 OrgForm.validate = org => validate(org, FIELDS);
-
-OrgForm.propTypes = {
-  /* eslint-disable react/forbid-prop-types */
-  errors: PropTypes.object.isRequired,
-  onChange: PropTypes.func.isRequired,
-  org: PropTypes.object.isRequired,
-  /* eslint-enable react/forbid-prop-types */
-};
 
 export default OrgForm;

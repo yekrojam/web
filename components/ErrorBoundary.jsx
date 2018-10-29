@@ -1,7 +1,13 @@
+// @flow
+
 import React from 'react';
 
-class ErrorBoundary extends React.Component {
-  componentDidCatch(error) {
+type Props = {
+  children: any,
+};
+
+class ErrorBoundary extends React.Component<Props> {
+  componentDidCatch(error: Error) {
     // TODO: Handle errors...
   }
 

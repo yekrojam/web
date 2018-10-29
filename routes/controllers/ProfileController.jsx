@@ -1,3 +1,5 @@
+// @flow
+
 import { find, isEmpty } from 'lodash';
 import moment from 'moment';
 import React from 'react';
@@ -7,18 +9,26 @@ import { connect } from 'react-redux';
 import Loader from '../../components/Loader/Loader';
 import MemberImage from '../../components/User/MemberImage';
 import Page from '../../components/Page/Page';
+
 import { fetchMember } from '../../actions';
+import { getUserName } from '../../utils/userUtils';
 
 import ActionTypes from '../../constants/ActionTypes';
-import { UserType } from '../../constants/propTypes';
-import { getUserName } from '../../utils/userUtils';
+import { Id, User } from '../../constants/types';
+
+type Props = {
+  fetchMember: Function,
+  match: { params: { userId: Id } },
+  requests: Object,
+  user: User,
+};
 
 /**
  * ProfileController
  *
  * A generic profile page for a user, depending on the URL's id param.
  */
-class ProfileController extends React.Component {
+class ProfileController extends React.Component<Props> {
   componentDidMount() {
     this.props.fetchMember(this.props.match.params.userId);
   }
@@ -111,10 +121,6 @@ class ProfileController extends React.Component {
     );
   }
 }
-
-ProfileController.propTypes = {
-  user: UserType,
-};
 
 const mapStateToProps = (state, props) => {
   const { requests, users } = state;

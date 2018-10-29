@@ -1,9 +1,27 @@
+// @flow
+
 import { isEmpty } from 'lodash';
 import React, { Fragment } from 'react';
 import { Button, Checkbox, ControlLabel, FormGroup, HelpBlock, Modal } from 'react-bootstrap';
 
 import Loader from '../Loader/Loader';
 import UserForm from './UserForm';
+
+import { Member, Role } from '../../constants/types';
+
+type Props = {
+  isLoading: bool,
+  onDelete: Function,
+  onHide: Function,
+  onSave: Function,
+  show: bool,
+  user: Member,
+};
+
+type State = {
+  errors: Object,
+  user: Object,
+};
 
 const ROLES = [
   'Member',
@@ -19,12 +37,12 @@ const FIELDS = [
   },
 ];
 
-const getInitialState = props => ({
+const getInitialState = (props: Props): State => ({
   errors: {},
   user: props.user || {},
 });
 
-class UserModal extends React.Component {
+class UserModal extends React.Component<Props, State> {
   state = getInitialState(this.props);
 
   render() {
@@ -77,7 +95,7 @@ class UserModal extends React.Component {
     );
   }
 
-  _renderRole = (role) => {
+  _renderRole = (role: Role) => {
     const { user } = this.state;
     const value = role.toUpperCase();
     const checked = !!(user && user.roles) && user.roles.indexOf(value) > -1;
@@ -94,8 +112,8 @@ class UserModal extends React.Component {
     );
   }
 
-  _updateUser = (key, value) => {
-    this.setState((state, props) => ({
+  _updateUser = (key: string, value: any) => {
+    this.setState((state: State, props: Props) => ({
       user: {
         ...state.user,
         [key]: value,
@@ -103,12 +121,12 @@ class UserModal extends React.Component {
     }));
   }
 
-  _handleChange = (e) => {
+  _handleChange = (e: { target: HTMLInputElement }) => {
     const { name, value } = e.target;
     this._updateUser(name, value);
   }
 
-  _handleRoleChange = (e) => {
+  _handleRoleChange = (e: { target: HTMLInputElement }) => {
     const { user } = this.state;
     const { checked, value } = e.target;
 
@@ -123,11 +141,11 @@ class UserModal extends React.Component {
     this._updateUser('roles', roles);
   }
 
-  _handleEnter = (e) => {
+  _handleEnter = () => {
     this.setState(getInitialState(this.props));
   }
 
-  _handleSave = (e) => {
+  _handleSave = () => {
     const { user } = this.state;
 
     // Basic client-side validation.

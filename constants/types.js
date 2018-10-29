@@ -1,9 +1,11 @@
+/* Redux */
 export type Action = {
   data: ?any,
   type: string,
 };
 
 export type ActionType = string;
+
 
 export type Field = {
   error?: string,
@@ -13,6 +15,8 @@ export type Field = {
 
 export type Id = string;
 
+
+/* Schema */
 export type Org = {
   id: Id,
   name: string,
@@ -47,4 +51,18 @@ export type Membership = {
 export type Member = {
   ...User,
   roles: Roles,
+};
+
+export type Session = {
+  authToken: string,
+  user: User | {},
+};
+
+/* Server */
+export type Request = {
+
+};
+
+export type Response = {
+
 };

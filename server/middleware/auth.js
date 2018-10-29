@@ -1,3 +1,5 @@
+// @flow
+
 import passport from 'passport';
 import Auth0Strategy from 'passport-auth0';
 import { stringify } from 'qs';
@@ -7,13 +9,16 @@ import generateToken from '../utils/generateToken';
 import membershipToUser from '../../utils/membershipToUser';
 
 import { AUTH_PATH, HOME_PATH, INDEX_PATH } from '../../constants/app';
+import { Id, Request, Response, User } from '../../constants/types';
 
-const { AUTH0_CALLBACK_URL, ORG_ID } = process.env;
+const { AUTH0_CALLBACK_URL } = process.env;
+const AUTH0_DOMAIN = process.env.AUTH0_DOMAIN || '';
+const ORG_ID = process.env.ORG_ID || '';
 
 /**
  * Handle user authentication on a per-route basis all in one place.
  */
-export function checkAuth(req, res, next) {
+export function checkAuth(req: Request, res: Response, next: Function) {
   const isAuthenticated = req.isAuthenticated();
   let redirectPath;
 
@@ -54,7 +59,11 @@ export function checkAuth(req, res, next) {
  * Generate an auth token for API requests, fetch the org info, and make both
  * available on the request object.
  */
-export async function initializeAuth(req, res, next) {
+export async function initializeAuth(
+  req: Request,
+  res: Response,
+  next: Function,
+) {
   const user = req.user || {};
   const authToken = generateToken({ user: user.id });
 
@@ -72,8 +81,8 @@ export async function initializeAuth(req, res, next) {
  * Configure the strategy for use by Passport.
  */
 const authConfig = {
-  audience: `https://${process.env.AUTH0_DOMAIN}/userinfo`,
-  domain: process.env.AUTH0_DOMAIN,
+  audience: `https://${AUTH0_DOMAIN}/userinfo`,
+  domain: AUTH0_DOMAIN,
   clientID: process.env.AUTH0_CLIENT_ID,
   clientSecret: process.env.AUTH0_CLIENT_SECRET,
   callbackURL: process.env.AUTH0_CALLBACK_URL,
@@ -86,7 +95,13 @@ const authConfig = {
  *  - `extraParams.id_token` has the JSON Web Token
  *  - `profile` has all the information from the user
  */
-async function onVerify(accessToken, refreshToken, extraParams, profile, next) {
+async function onVerify(
+  accessToken: string,
+  refreshToken: string,
+  extraParams: Object,
+  profile: Object,
+  next: Function,
+) {
   /* eslint-disable-next-line no-underscore-dangle */
   if (!(profile && profile._json && profile._json.email)) {
     // We didn't get a valid response back from Auth0.
@@ -114,11 +129,11 @@ async function onVerify(accessToken, refreshToken, extraParams, profile, next) {
   }
 }
 
-function serializeUser(user, next) {
+function serializeUser(user: User, next: Function) {
   next(null, user.id);
 }
 
-async function deserializeUser(id, next) {
+async function deserializeUser(id: Id, next: Function) {
   try {
     const query = stringify({
       populate: 'user',

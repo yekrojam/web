@@ -1,11 +1,17 @@
+// @flow
+
 import React, { Fragment } from 'react';
 import { MenuItem, NavDropdown } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 
 import isAdmin from '../../utils/isAdmin';
-import { UserType } from '../../constants/propTypes';
+import { User } from '../../constants/types';
 
 import './styles/AccountNavItem.scss';
+
+type Props = {
+  user: User,
+};
 
 const AppMenuItem = ({ children, to }) => (
   <LinkContainer isActive={() => false} to={to}>
@@ -13,7 +19,9 @@ const AppMenuItem = ({ children, to }) => (
   </LinkContainer>
 );
 
-const AccountNavItem = ({ user }) => {
+const AccountNavItem = (props: Props) => {
+  const { user } = props;
+
   const items = [
     { label: 'My profile', pathname: `/users/${user.id}` },
     { label: 'My settings', pathname: '/settings' },
@@ -51,10 +59,6 @@ const AccountNavItem = ({ user }) => {
       </MenuItem>
     </NavDropdown>
   );
-};
-
-AccountNavItem.propTypes = {
-  user: UserType.isRequired,
 };
 
 export default AccountNavItem;

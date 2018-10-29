@@ -1,3 +1,5 @@
+// @flow
+
 import { createMemoryHistory } from 'history';
 import React from 'react';
 import { renderToString } from 'react-dom/server';
@@ -9,7 +11,9 @@ import App from '../../components/App';
 import createStore from '../../store';
 import renderHtml from '../utils/renderHtml';
 
-export default (req, res, next) => {
+import { Request, Response } from '../../constants/types';
+
+export default (req: Request, res: Response, next: Function) => {
   try {
     const { authToken, org, user, url } = req;
     const history = createMemoryHistory({ initialEntries: [url] });

@@ -1,3 +1,5 @@
+// @flow
+
 import { isEmpty, isEqual } from 'lodash';
 import React, { Fragment } from 'react';
 import { Button } from 'react-bootstrap';
@@ -8,8 +10,20 @@ import PageHeader from '../Page/PageHeader';
 
 import { updateOrg } from '../../actions';
 import ActionTypes from '../../constants/ActionTypes';
+import { Org } from '../../constants/types';
 
-class OrgAdmin extends React.Component {
+type Props = {
+  requests: Object,
+  org: Org,
+  updateOrg: Function,
+};
+
+type State = {
+  errors: Object,
+  org: Org | {},
+};
+
+class OrgAdmin extends React.Component<Props, State> {
   state = {
     errors: {},
     org: this.props.org,
@@ -40,7 +54,7 @@ class OrgAdmin extends React.Component {
   _handleChange = (e) => {
     const { name, value } = e.target;
 
-    this.setState((state, props) => ({
+    this.setState((state: State, props: Props) => ({
       org: {
         ...state.org,
         [name]: value,

@@ -1,3 +1,5 @@
+// @flow
+
 import { find, isEmpty, isEqual } from 'lodash';
 import React from 'react';
 import { Button } from 'react-bootstrap';
@@ -10,7 +12,20 @@ import UserForm from '../../components/User/UserForm';
 
 import { fetchMember, updateUser } from '../../actions';
 import ActionTypes from '../../constants/ActionTypes';
-import { UserType } from '../../constants/propTypes';
+import { Session, User } from '../../constants/types';
+
+type Props = {
+  fetchMember: Function,
+  requests: Object,
+  session: Session,
+  updateUser: Function,
+  user: User,
+};
+
+type State = {
+  errors: Object,
+  user: User | {},
+};
 
 const getInitialState = props => ({
   errors: {},
@@ -20,7 +35,7 @@ const getInitialState = props => ({
 /**
  * SettingsController
  */
-class SettingsController extends React.Component {
+class SettingsController extends React.Component<Props, State> {
   state = getInitialState(this.props);
 
   componentDidMount() {
@@ -30,7 +45,7 @@ class SettingsController extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: Props) {
     if (!isEqual(nextProps.user, this.props.user)) {
       this.setState(getInitialState(nextProps));
     }
@@ -68,7 +83,7 @@ class SettingsController extends React.Component {
   _handleChange = (e) => {
     const { name, value } = e.target;
 
-    this.setState((state, props) => ({
+    this.setState((state: State, props: Props) => ({
       user: {
         ...state.user,
         [name]: value,
@@ -91,19 +106,11 @@ class SettingsController extends React.Component {
   }
 }
 
-SettingsController.propTypes = {
-  user: UserType,
-};
-
-const mapStateToProps = (state, props) => {
-  const { requests, session, users } = state;
-
-  return {
-    requests,
-    session,
-    user: find(users, user => user.id === session.user.id),
-  };
-};
+const mapStateToProps = ({ requests, session, users }) => ({
+  requests,
+  session,
+  user: find(users, user => user.id === session.user.id),
+});
 
 const mapDispatchToProps = dispatch => ({
   fetchMember: userId => dispatch(fetchMember(userId)),

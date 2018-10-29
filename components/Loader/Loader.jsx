@@ -1,7 +1,6 @@
 // @flow
 
 import cx from 'classnames';
-import PropTypes from 'prop-types';
 import React from 'react';
 
 import './Loader.scss';
@@ -32,12 +31,6 @@ const Loader = (props: Props) => {
       />
     </div>
   );
-};
-
-Loader.propTypes = {
-  background: PropTypes.bool,
-  full: PropTypes.bool,
-  size: PropTypes.oneOf(['large', 'small']),
 };
 
 Loader.defaultProps = {
