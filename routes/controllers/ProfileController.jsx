@@ -10,7 +10,7 @@ import { fetchUser } from '../../actions';
 
 import ActionTypes from '../../constants/ActionTypes';
 import { UserType } from '../../constants/propTypes';
-import getUserName from '../../utils/getUserName';
+import { getUserImage, getUserName } from '../../utils/userUtils';
 
 /**
  * ProfileController
@@ -93,7 +93,7 @@ class ProfileController extends React.Component {
       <div>
         <Media>
           <Media.Left>
-            <img alt={name} src={user.imageURL} height={150} width={150} />
+            <img alt={name} src={getUserImage(user)} height={150} width={150} />
           </Media.Left>
           <Media.Body>
             <h2>{name}</h2>

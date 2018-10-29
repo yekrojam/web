@@ -12,7 +12,7 @@ import PageHeader from '../../components/Page/PageHeader';
 import { fetchUsers } from '../../actions';
 import ActionTypes from '../../constants/ActionTypes';
 import { UserType } from '../../constants/propTypes';
-import getUserName from '../../utils/getUserName';
+import { getUserImage, getUserName } from '../../utils/userUtils';
 
 const MemberCard = ({ user }) => {
   const isAdmin = user.roles.indexOf('ADMIN') > -1;
@@ -28,7 +28,7 @@ const MemberCard = ({ user }) => {
       <Panel.Body>
         <Media>
           <Media.Left>
-            <img alt={name} src={user.imageURL} height={100} width={100} />
+            <img alt={name} src={getUserImage(user)} height={100} width={100} />
           </Media.Left>
           <Media.Body>
             <Media.Heading>

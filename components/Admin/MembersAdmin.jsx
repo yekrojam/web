@@ -13,7 +13,7 @@ import UserModal from '../User/UserModal';
 import { createMembership, createUser, deleteUser, fetchUsers, updateUser } from '../../actions';
 import ActionTypes from '../../constants/ActionTypes';
 import { UserType } from '../../constants/propTypes';
-import getUserName from '../../utils/getUserName';
+import { getUserName } from '../../utils/userUtils';
 import { isComplete, isPending } from '../../utils/actionTypes';
 
 class MembersAdmin extends React.Component {
