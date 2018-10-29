@@ -3,6 +3,12 @@ export type Action = {
   type: string,
 };
 
+export type Field = {
+  error?: string,
+  isValid?: Function,
+  name: string,
+};
+
 export type Role = 'ADMIN' | 'MEMBER';
 
 export type User = {

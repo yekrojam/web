@@ -7,7 +7,7 @@ export default function request(
   url: string,
   type: string,
   options: ?Object = {},
-  transformData: ?Function = null,
+  beforeSuccess: ?Function = null,
 ): Function {
   return (dispatch: Function, getState: Function): void => {
     dispatch({ type });
@@ -15,9 +15,11 @@ export default function request(
     const { authToken } = getState().session;
 
     api(url, { ...options, authToken })
+      /* eslint-disable-next-line no-confusing-arrow */
+      .then(data => beforeSuccess ? beforeSuccess(data) : data)
       .then((data) => {
         dispatch({
-          data: transformData ? transformData(data) : data,
+          data,
           type: getSuccessType(type),
         });
       })

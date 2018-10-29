@@ -7,7 +7,7 @@ import { Col, ControlLabel, FormControl, FormGroup, HelpBlock, Row } from 'react
 
 import { notBlank, validate } from '../../utils/forms';
 import { UserType } from '../../constants/propTypes';
-import { User } from '../../constants/types';
+import { Field, User } from '../../constants/types';
 
 type Props = {
   errors: Object,
@@ -25,7 +25,7 @@ const FIELDS = [
   },
   {
     error: 'Please enter a valid email address.',
-    isValid: value => notBlank && value.indexOf('@') > -1,
+    isValid: value => notBlank(value) && value.indexOf('@') > -1,
     label: 'Email',
     name: 'email',
     required: true,
@@ -128,7 +128,9 @@ const UserForm = (props: Props) => {
   );
 };
 
-UserForm.validate = user => validate(user, FIELDS);
+UserForm.validate = (data: Object, extraFields: Array<Field> = []) => (
+  validate(data, FIELDS.concat(extraFields))
+);
 
 UserForm.propTypes = {
   /* eslint-disable-next-line react/forbid-prop-types */

@@ -1,19 +1,15 @@
 // @flow
 
-type Field = {
-  error?: string,
-  isValid?: Function,
-  name: string,
-};
+import { Field } from '../constants/types';
 
 /**
  * Validates object properties based on rules defined for each field. Returns
  * an error object with a message for each property that fails validation.
  */
-export function validate(obj: Object, fields: Array<Field>): Object {
+export function validate(data: Object, fields: Array<Field>): Object {
   const errors = {};
   fields.forEach(({ error, isValid, name }) => {
-    if (isValid && !isValid(obj[name])) {
+    if (isValid && !isValid(data[name])) {
       errors[name] = error;
     }
   });

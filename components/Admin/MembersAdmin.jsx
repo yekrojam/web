@@ -7,11 +7,10 @@ import { Link } from 'react-router-dom';
 
 import Loader from '../Loader/Loader';
 import MemberImage from '../User/MemberImage';
-import MembershipModal from '../Membership/MembershipModal';
 import PageHeader from '../Page/PageHeader';
 import UserModal from '../User/UserModal';
 
-import { createMembership, createUser, deleteUser, fetchUsers, updateUser } from '../../actions';
+import { createMember, deleteUser, fetchMembers, updateUser } from '../../actions';
 import ActionTypes from '../../constants/ActionTypes';
 import { UserType } from '../../constants/propTypes';
 import { getUserName } from '../../utils/userUtils';
@@ -20,19 +19,17 @@ import { isComplete, isPending } from '../../utils/actionTypes';
 class MembersAdmin extends React.Component {
   state = {
     filter: '',
-    membership: null,
     show: false,
     user: null,
   };
 
   componentDidMount() {
-    this.props.fetchUsers();
+    this.props.fetchMembers();
   }
 
   componentWillReceiveProps({ requests }) {
     const types = [
-      ActionTypes.MEMBERSHIP_CREATE,
-      ActionTypes.USER_CREATE,
+      ActionTypes.MEMBER_CREATE,
       ActionTypes.USER_DELETE,
       ActionTypes.USER_UPDATE,
     ];
@@ -44,12 +41,11 @@ class MembersAdmin extends React.Component {
   }
 
   render() {
-    const { requests, users } = this.props;
-    const { membership, show, user } = this.state;
+    const { requests } = this.props;
+    const { show, user } = this.state;
 
     const isLoading = isPending(requests, [
-      ActionTypes.MEMBERSHIP_CREATE,
-      ActionTypes.USER_CREATE,
+      ActionTypes.MEMBER_CREATE,
       ActionTypes.USER_DELETE,
       ActionTypes.USER_UPDATE,
     ]);
@@ -59,10 +55,7 @@ class MembersAdmin extends React.Component {
         <PageHeader title="Members">
           <ButtonToolbar>
             <Button onClick={this._handleModalShow}>
-              Add User
-            </Button>
-            <Button onClick={this._handleMembershipModalShow}>
-              Add Membership
+              Add Member
             </Button>
             <FormControl
               className="user-filter"
@@ -72,20 +65,12 @@ class MembersAdmin extends React.Component {
           </ButtonToolbar>
         </PageHeader>
         {this._renderContents()}
-        <MembershipModal
-          isLoading={isLoading}
-          onHide={this._handleModalHide}
-          onSave={this._handleMembershipSave}
-          membership={membership}
-          show={show === 'membership'}
-          users={users || []}
-        />
         <UserModal
           isLoading={isLoading}
           onDelete={this._handleDelete}
           onHide={this._handleModalHide}
           onSave={this._handleSave}
-          show={show === 'user'}
+          show={show}
           user={user}
         />
       </Fragment>
@@ -95,7 +80,7 @@ class MembersAdmin extends React.Component {
   _renderContents = () => {
     const { requests, users } = this.props;
 
-    if (isEmpty(users) || isPending(requests, ActionTypes.USERS_FETCH)) {
+    if (isEmpty(users) || isPending(requests, ActionTypes.MEMBERS_FETCH)) {
       return <Loader />;
     }
 
@@ -162,32 +147,18 @@ class MembersAdmin extends React.Component {
     this.setState({ show: false });
   }
 
-  _handleMembershipModalShow = (e, membership) => {
-    this.setState({
-      membership,
-      show: 'membership',
-    });
-  }
-
   _handleModalShow = (e, user) => {
     this.setState({
-      show: 'user',
+      show: true,
       user,
     });
   }
 
   _handleDelete = (userId) => {
     /* eslint-disable-next-line no-restricted-globals, no-alert */
-    if (confirm('Are you sure you want to delete this user?')) {
+    if (confirm('Are you sure you want to delete this member?')) {
       this.props.deleteUser(userId);
     }
-  }
-
-  _handleMembershipSave = (membership) => {
-    this.props.createMembership({
-      ...membership,
-      org: this.props.org.id,
-    });
   }
 
   _handleSave = (user) => {
@@ -196,7 +167,7 @@ class MembersAdmin extends React.Component {
       return;
     }
 
-    this.props.createUser(user);
+    this.props.createMember(user);
   }
 }
 
@@ -211,10 +182,9 @@ const mapStateToProps = ({ org, requests, users }) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  createMembership: membership => dispatch(createMembership(membership)),
-  createUser: user => dispatch(createUser(user)),
+  createMember: member => dispatch(createMember(member)),
   deleteUser: userId => dispatch(deleteUser(userId)),
-  fetchUsers: () => dispatch(fetchUsers()),
+  fetchMembers: () => dispatch(fetchMembers()),
   updateUser: user => dispatch(updateUser(user)),
 });
 

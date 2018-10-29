@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import Loader from '../../components/Loader/Loader';
 import MemberImage from '../../components/User/MemberImage';
 import Page from '../../components/Page/Page';
-import { fetchUser } from '../../actions';
+import { fetchMember } from '../../actions';
 
 import ActionTypes from '../../constants/ActionTypes';
 import { UserType } from '../../constants/propTypes';
@@ -20,13 +20,13 @@ import { getUserName } from '../../utils/userUtils';
  */
 class ProfileController extends React.Component {
   componentDidMount() {
-    this.props.fetchUser(this.props.match.params.userId);
+    this.props.fetchMember(this.props.match.params.userId);
   }
 
   componentWillReceiveProps({ match: { params } }) {
     // Re-fetch data when navigating to a different profile.
     if (this.props.match.params.userId !== params.userId) {
-      this.props.fetchUser(params.userId);
+      this.props.fetchMember(params.userId);
     }
   }
 
@@ -41,7 +41,7 @@ class ProfileController extends React.Component {
   _renderContents = () => {
     const { requests, user } = this.props;
 
-    if (isEmpty(user) || requests[ActionTypes.USERS_FETCH]) {
+    if (isEmpty(user) || requests[ActionTypes.MEMBER_FETCH]) {
       return <Loader />;
     }
 
@@ -127,7 +127,7 @@ const mapStateToProps = (state, props) => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  fetchUser: userId => dispatch(fetchUser(userId)),
+  fetchMember: userId => dispatch(fetchMember(userId)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProfileController);

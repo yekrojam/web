@@ -1,9 +1,23 @@
 import { isEmpty } from 'lodash';
-import React from 'react';
-import { Button, Modal } from 'react-bootstrap';
+import React, { Fragment } from 'react';
+import { Button, Checkbox, ControlLabel, FormGroup, HelpBlock, Modal } from 'react-bootstrap';
 
 import Loader from '../Loader/Loader';
 import UserForm from './UserForm';
+
+const ROLES = [
+  'Member',
+  'Admin',
+];
+
+const FIELDS = [
+  {
+    error: 'Please select at least one role for the user.',
+    isValid: roles => roles && roles.length,
+    name: 'roles',
+    required: true,
+  },
+];
 
 const getInitialState = props => ({
   errors: {},
@@ -15,13 +29,21 @@ class UserModal extends React.Component {
 
   render() {
     const { isLoading, onDelete, onHide, show, user } = this.props;
+    const { errors } = this.state;
 
     const contents = isLoading ?
       <Loader /> :
-      <UserForm
-        {...this.state}
-        onChange={this._handleChange}
-      />;
+      <Fragment>
+        <UserForm
+          {...this.state}
+          onChange={this._handleChange}
+        />
+        <FormGroup validationState={errors.roles ? 'error' : null}>
+          <ControlLabel>Roles</ControlLabel>
+          {ROLES.map(this._renderRole)}
+          {errors.roles ? <HelpBlock>{errors.roles}</HelpBlock> : null}
+        </FormGroup>
+      </Fragment>;
 
     return (
       <Modal
@@ -29,7 +51,7 @@ class UserModal extends React.Component {
         onHide={onHide}
         show={!!show}>
         <Modal.Header closeButton>
-          <Modal.Title>{user ? 'Edit' : 'Add'} User</Modal.Title>
+          <Modal.Title>{user ? 'Edit' : 'Add'} Member</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {contents}
@@ -55,15 +77,50 @@ class UserModal extends React.Component {
     );
   }
 
-  _handleChange = (e) => {
-    const { name, value } = e.target;
+  _renderRole = (role) => {
+    const { user } = this.state;
+    const value = role.toUpperCase();
+    const checked = !!(user && user.roles) && user.roles.indexOf(value) > -1;
 
+    return (
+      <Checkbox
+        checked={checked}
+        key={value}
+        name="roles"
+        onChange={this._handleRoleChange}
+        value={value}>
+        {role}
+      </Checkbox>
+    );
+  }
+
+  _updateUser = (key, value) => {
     this.setState((state, props) => ({
       user: {
         ...state.user,
-        [name]: value,
+        [key]: value,
       },
     }));
+  }
+
+  _handleChange = (e) => {
+    const { name, value } = e.target;
+    this._updateUser(name, value);
+  }
+
+  _handleRoleChange = (e) => {
+    const { user } = this.state;
+    const { checked, value } = e.target;
+
+    let roles = user.roles ? user.roles.slice() : [];
+
+    if (checked) {
+      roles.push(value);
+    } else {
+      roles = roles.filter(r => r !== value);
+    }
+
+    this._updateUser('roles', roles);
   }
 
   _handleEnter = (e) => {
@@ -74,7 +131,7 @@ class UserModal extends React.Component {
     const { user } = this.state;
 
     // Basic client-side validation.
-    const errors = UserForm.validate(user);
+    const errors = UserForm.validate(user, FIELDS);
 
     if (!isEmpty(errors)) {
       this.setState({ errors });

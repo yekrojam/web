@@ -4,7 +4,8 @@ import { find } from 'lodash';
 import { stringify } from 'qs';
 
 import ActionTypes from '../constants/ActionTypes';
-import { getSuccessType } from '../utils/actionTypes';
+import { getErrorType, getSuccessType } from '../utils/actionTypes';
+import api from '../utils/api';
 import membershipToUser from '../utils/membershipToUser';
 import request from '../utils/request';
 
@@ -21,25 +22,57 @@ function getUserQuery(orgId: string, userId: ?string = null): string {
   });
 }
 
-export const createMembership =
-  (data: Object) => (dispatch: Function): void => (
-    dispatch(request('/membership', ActionTypes.MEMBERSHIP_CREATE, {
-      body: JSON.stringify(data),
+// TODO: Improve the `api` util so we're not replicating logic here.
+export const createMember =
+  (data: Object) => (dispatch: Function, getState: Function): void => {
+    const type = ActionTypes.MEMBER_CREATE;
+
+    dispatch({ type });
+
+    const { org, session: { authToken } } = getState();
+    const { roles, ...user } = data;
+
+    // First create the user...
+    api('/user', {
+      authToken,
+      body: JSON.stringify(user),
       method: 'POST',
-    }))
-  );
+    })
+      .then((userData) => {
+        const query = stringify({
+          populate: 'user',
+        });
+
+        // We have the user, now create the membership.
+        api(`/membership?${query}`, {
+          authToken,
+          body: JSON.stringify({
+            org: org.id,
+            roles,
+            user: userData.id,
+          }),
+          method: 'POST',
+        })
+          .then((membershipData) => {
+            // Success, the user is now a member.
+            dispatch({
+              data: membershipToUser(membershipData),
+              type: getSuccessType(type),
+            });
+          });
+      })
+      .catch((error) => {
+        dispatch({
+          error,
+          type: getErrorType(type),
+        });
+      });
+  };
 
 export const updateOrg = (data: Object) => (dispatch: Function): void => (
   dispatch(request(`/org/${data.id}`, ActionTypes.ORG_UPDATE, {
     body: JSON.stringify(data),
     method: 'PATCH',
-  }))
-);
-
-export const createUser = (data: Object) => (dispatch: Function): void => (
-  dispatch(request('/user', ActionTypes.USER_CREATE, {
-    body: JSON.stringify(data),
-    method: 'POST',
   }))
 );
 
@@ -49,9 +82,9 @@ export const deleteUser = (userId: string) => (dispatch: Function): void => (
   }))
 );
 
-export const fetchUser =
+export const fetchMember =
   (userId: string) => (dispatch: Function, getState: Function): void => {
-    const type = ActionTypes.USER_FETCH;
+    const type = ActionTypes.MEMBER_FETCH;
     const { org, users } = getState();
 
     // Check if we already have the user.
@@ -80,13 +113,13 @@ export const updateUser = (data: Object) => (dispatch: Function): void => (
   }))
 );
 
-export const fetchUsers =
+export const fetchMembers =
   () => (dispatch: Function, getState: Function): void => {
     const { org } = getState();
 
     dispatch(request(
       `/membership?${getUserQuery(org.id)}`,
-      ActionTypes.USERS_FETCH,
+      ActionTypes.MEMBERS_FETCH,
       {},
       data => data.map(membershipToUser),
     ));

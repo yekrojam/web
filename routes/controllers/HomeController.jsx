@@ -10,7 +10,7 @@ import MemberImage from '../../components/User/MemberImage';
 import Page from '../../components/Page/Page';
 import PageHeader from '../../components/Page/PageHeader';
 
-import { fetchUsers } from '../../actions';
+import { fetchMembers } from '../../actions';
 import ActionTypes from '../../constants/ActionTypes';
 import { UserType } from '../../constants/propTypes';
 import { getUserName } from '../../utils/userUtils';
@@ -64,7 +64,7 @@ class HomeController extends React.Component {
   state = { filter: '' }
 
   componentDidMount() {
-    this.props.fetchUsers();
+    this.props.fetchMembers();
   }
 
   render() {
@@ -87,7 +87,7 @@ class HomeController extends React.Component {
     const { requests, users } = this.props;
     const filter = this.state.filter.toLowerCase();
 
-    if (isEmpty(users) || requests[ActionTypes.USERS_FETCH]) {
+    if (isEmpty(users) || requests[ActionTypes.MEMBERS_FETCH]) {
       return <Loader />;
     }
 
@@ -122,6 +122,8 @@ const mapStateToProps = ({ requests, users }) => ({
   users,
 });
 
-const mapDispatchToProps = dispatch => ({ fetchUsers: () => dispatch(fetchUsers()) });
+const mapDispatchToProps = dispatch => ({
+  fetchMembers: () => dispatch(fetchMembers()),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeController);

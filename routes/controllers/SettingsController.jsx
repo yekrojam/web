@@ -8,7 +8,7 @@ import Page from '../../components/Page/Page';
 import PageHeader from '../../components/Page/PageHeader';
 import UserForm from '../../components/User/UserForm';
 
-import { fetchUser, updateUser } from '../../actions';
+import { fetchMember, updateUser } from '../../actions';
 import ActionTypes from '../../constants/ActionTypes';
 import { UserType } from '../../constants/propTypes';
 
@@ -26,7 +26,7 @@ class SettingsController extends React.Component {
   componentDidMount() {
     const { session, user } = this.props;
     if (isEmpty(user)) {
-      this.props.fetchUser(session.user.id);
+      this.props.fetchMember(session.user.id);
     }
   }
 
@@ -40,7 +40,7 @@ class SettingsController extends React.Component {
     const { requests, user } = this.props;
     const title = 'Settings';
 
-    const isLoading = isEmpty(user) || requests[ActionTypes.USERS_FETCH];
+    const isLoading = isEmpty(user) || requests[ActionTypes.MEMBER_FETCH];
 
     const contents = isLoading ?
       <Loader /> :
@@ -106,7 +106,7 @@ const mapStateToProps = (state, props) => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  fetchUser: userId => dispatch(fetchUser(userId)),
+  fetchMember: userId => dispatch(fetchMember(userId)),
   updateUser: user => dispatch(updateUser(user)),
 });
 
