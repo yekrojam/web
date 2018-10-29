@@ -3,13 +3,15 @@
 import { find } from 'lodash';
 import { stringify } from 'qs';
 
-import ActionTypes from '../constants/ActionTypes';
 import { getErrorType, getSuccessType } from '../utils/actionTypes';
 import api from '../utils/api';
 import membershipToUser from '../utils/membershipToUser';
 import request from '../utils/request';
 
-function getUserQuery(orgId: string, userId: ?string = null): string {
+import ActionTypes from '../constants/ActionTypes';
+import { Id, Member, Membership, Org, User } from '../constants/types';
+
+function getUserQuery(orgId: Id, userId: ?Id = null): string {
   let query = { org: orgId };
   if (userId) {
     query = { ...query, user: userId };
@@ -24,7 +26,7 @@ function getUserQuery(orgId: string, userId: ?string = null): string {
 
 // TODO: Improve the `api` util so we're not replicating logic here.
 export const createMember =
-  (data: Object) => (dispatch: Function, getState: Function): void => {
+  (data: Member) => (dispatch: Function, getState: Function): void => {
     const type = ActionTypes.MEMBER_CREATE;
 
     dispatch({ type });
@@ -38,7 +40,7 @@ export const createMember =
       body: JSON.stringify(user),
       method: 'POST',
     })
-      .then((userData) => {
+      .then((userData: User) => {
         const query = stringify({
           populate: 'user',
         });
@@ -53,7 +55,7 @@ export const createMember =
           }),
           method: 'POST',
         })
-          .then((membershipData) => {
+          .then((membershipData: Membership) => {
             // Success, the user is now a member.
             dispatch({
               data: membershipToUser(membershipData),
@@ -69,21 +71,21 @@ export const createMember =
       });
   };
 
-export const updateOrg = (data: Object) => (dispatch: Function): void => (
+export const updateOrg = (data: Org) => (dispatch: Function): void => (
   dispatch(request(`/org/${data.id}`, ActionTypes.ORG_UPDATE, {
     body: JSON.stringify(data),
     method: 'PATCH',
   }))
 );
 
-export const deleteUser = (userId: string) => (dispatch: Function): void => (
+export const deleteUser = (userId: Id) => (dispatch: Function): void => (
   dispatch(request(`/user/${userId}`, ActionTypes.USER_DELETE, {
     method: 'DELETE',
   }))
 );
 
 export const fetchMember =
-  (userId: string) => (dispatch: Function, getState: Function): void => {
+  (userId: Id) => (dispatch: Function, getState: Function): void => {
     const type = ActionTypes.MEMBER_FETCH;
     const { org, users } = getState();
 
@@ -106,7 +108,7 @@ export const fetchMember =
     ));
   };
 
-export const updateUser = (data: Object) => (dispatch: Function): void => (
+export const updateUser = (data: User) => (dispatch: Function): void => (
   dispatch(request(`/user/${data.id}`, ActionTypes.USER_UPDATE, {
     body: JSON.stringify(data),
     method: 'PATCH',

@@ -4,14 +4,14 @@ import cx from 'classnames';
 import React from 'react';
 
 import { getUserImage, getUserName } from '../../utils/userUtils';
-import { User } from '../../constants/types';
+import { Member } from '../../constants/types';
 
 type Size = 'small' | 'medium' | 'large';
 
 type Props = {
   className?: string,
   size?: Size,
-  user: User,
+  user: Member,
 };
 
 function getDimension(size?: Size) {

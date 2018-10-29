@@ -5,9 +5,9 @@ import { find } from 'lodash';
 import { getSuccessType } from '../../utils/actionTypes';
 
 import ActionTypes from '../../constants/ActionTypes';
-import { Action, User } from '../../constants/types';
+import { Action, Member } from '../../constants/types';
 
-const userReducer = (state: User = {}, action: Action): User => {
+const userReducer = (state: Member = {}, action: Action): Member => {
   let user;
 
   switch (action.type) {
@@ -22,7 +22,7 @@ const userReducer = (state: User = {}, action: Action): User => {
   }
 };
 
-export default (state: Array<User> = [], action: Action): Array<User> => {
+export default (state: Array<Member> = [], action: Action): Array<Member> => {
   let user;
 
   switch (action.type) {

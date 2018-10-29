@@ -1,20 +1,11 @@
 // @flow
 
-type Roles = Array<string>;
-
-type Membership = {
-  roles: Roles,
-  user: Object,
-};
-
-type UserWithRoles = {
-  roles: Roles,
-};
+import { Member, Membership } from '../constants/types';
 
 /**
  * Convert a populated membership object to a user object with roles.
  */
-export default (membership: Membership): UserWithRoles => {
+export default (membership: Membership): Member => {
   const { roles, user } = membership;
   if (typeof user === 'string') {
     // The user object wasn't correctly populated.

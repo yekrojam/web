@@ -7,12 +7,12 @@ import { Col, ControlLabel, FormControl, FormGroup, HelpBlock, Row } from 'react
 
 import { notBlank, validate } from '../../utils/forms';
 import { UserType } from '../../constants/propTypes';
-import { Field, User } from '../../constants/types';
+import { Field, Member } from '../../constants/types';
 
 type Props = {
   errors: Object,
   onChange: Function,
-  user: User,
+  user: Member,
 };
 
 const FIELDS = [

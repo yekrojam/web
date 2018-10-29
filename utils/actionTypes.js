@@ -1,29 +1,29 @@
 // @flow
 
-import { Action } from '../constants/types';
+import { Action, ActionType } from '../constants/types';
 
-type Types = string | Array<string>;
+type Types = ActionType | Array<ActionType>;
 
 const CLEAR_ERRORS = 'CLEAR_ERRORS';
 
 // Util Functions
-export function getBaseType(type: string): string {
+export function getBaseType(type: ActionType): string {
   return type.replace('_ERROR', '').replace('_SUCCESS', '');
 }
 
-export function getErrorType(type: string): string {
+export function getErrorType(type: ActionType): string {
   return `${type}_ERROR`;
 }
 
-export function getSuccessType(type: string): string {
+export function getSuccessType(type: ActionType): string {
   return `${type}_SUCCESS`;
 }
 
-export function isBaseType(type: string): bool {
+export function isBaseType(type: ActionType): bool {
   return type.indexOf('ERROR') === -1 && type.indexOf('SUCCESS') === -1;
 }
 
-export function isErrorType(type: string): bool {
+export function isErrorType(type: ActionType): bool {
   return type.indexOf('ERROR') > -1;
 }
 
@@ -36,12 +36,12 @@ export function isPending(requests: Object, types: Types): bool {
   return !isComplete(requests, types);
 }
 
-export function createActionTypes(types: Array<string>): Object {
+export function createActionTypes(types: Array<ActionType>): Object {
   if (!Array.isArray(types)) {
     throw Error('The argument for `createActionTypes` must be an array.');
   }
 
-  return types.reduce((obj: Object, type: string): Object => ({
+  return types.reduce((obj: Object, type: ActionType): Object => ({
     ...obj,
     [type]: type,
     [getErrorType(type)]: getErrorType(type),

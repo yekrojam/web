@@ -10,9 +10,9 @@ import Settings from './controllers/SettingsController';
 import isAdmin from '../utils/isAdmin';
 
 import { HOME_PATH, INDEX_PATH } from '../constants/app';
-import { User } from '../constants/types';
+import { Member } from '../constants/types';
 
-export default function getRoutes(user: User) {
+export default function getRoutes(user: Member) {
   const routes = [
     {
       path: INDEX_PATH,
