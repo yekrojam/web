@@ -5,12 +5,13 @@ import { Media } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
 import Loader from '../../components/Loader/Loader';
+import MemberImage from '../../components/User/MemberImage';
 import Page from '../../components/Page/Page';
 import { fetchUser } from '../../actions';
 
 import ActionTypes from '../../constants/ActionTypes';
 import { UserType } from '../../constants/propTypes';
-import { getUserImage, getUserName } from '../../utils/userUtils';
+import { getUserName } from '../../utils/userUtils';
 
 /**
  * ProfileController
@@ -93,7 +94,7 @@ class ProfileController extends React.Component {
       <div>
         <Media>
           <Media.Left>
-            <img alt={name} src={getUserImage(user)} height={150} width={150} />
+            <MemberImage size="large" user={user} />
           </Media.Left>
           <Media.Body>
             <h2>{name}</h2>

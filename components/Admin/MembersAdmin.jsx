@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import Loader from '../Loader/Loader';
+import MemberImage from '../User/MemberImage';
 import MembershipModal from '../Membership/MembershipModal';
 import PageHeader from '../Page/PageHeader';
 import UserModal from '../User/UserModal';
@@ -13,7 +14,7 @@ import UserModal from '../User/UserModal';
 import { createMembership, createUser, deleteUser, fetchUsers, updateUser } from '../../actions';
 import ActionTypes from '../../constants/ActionTypes';
 import { UserType } from '../../constants/propTypes';
-import { getUserImage, getUserName } from '../../utils/userUtils';
+import { getUserName } from '../../utils/userUtils';
 import { isComplete, isPending } from '../../utils/actionTypes';
 
 class MembersAdmin extends React.Component {
@@ -130,12 +131,7 @@ class MembersAdmin extends React.Component {
     <tr key={user.id}>
       <td>
         <Link to={{ pathname: `/users/${user.id}` }}>
-          <img
-            className="member-image"
-            height={48}
-            src={getUserImage(user)}
-            width={48}
-          />
+          <MemberImage size="small" user={user} />
           {getUserName(user)}
         </Link>
       </td>

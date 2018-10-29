@@ -6,13 +6,14 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import Loader from '../../components/Loader/Loader';
+import MemberImage from '../../components/User/MemberImage';
 import Page from '../../components/Page/Page';
 import PageHeader from '../../components/Page/PageHeader';
 
 import { fetchUsers } from '../../actions';
 import ActionTypes from '../../constants/ActionTypes';
 import { UserType } from '../../constants/propTypes';
-import { getUserImage, getUserName } from '../../utils/userUtils';
+import { getUserName } from '../../utils/userUtils';
 
 const MemberCard = ({ user }) => {
   const isAdmin = user.roles.indexOf('ADMIN') > -1;
@@ -28,7 +29,7 @@ const MemberCard = ({ user }) => {
       <Panel.Body>
         <Media>
           <Media.Left>
-            <img alt={name} src={getUserImage(user)} height={100} width={100} />
+            <MemberImage user={user} />
           </Media.Left>
           <Media.Body>
             <Media.Heading>
