@@ -1,7 +1,7 @@
 import { isEmpty } from 'lodash';
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
-import { Button, ButtonToolbar, FormControl, Table } from 'react-bootstrap';
+import { Button, ButtonToolbar, FormControl, Label, Table } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
@@ -13,7 +13,7 @@ import UserModal from '../User/UserModal';
 import { createMembership, createUser, deleteUser, fetchUsers, updateUser } from '../../actions';
 import ActionTypes from '../../constants/ActionTypes';
 import { UserType } from '../../constants/propTypes';
-import { getUserName } from '../../utils/userUtils';
+import { getUserImage, getUserName } from '../../utils/userUtils';
 import { isComplete, isPending } from '../../utils/actionTypes';
 
 class MembersAdmin extends React.Component {
@@ -110,11 +110,12 @@ class MembersAdmin extends React.Component {
       </tr>;
 
     return (
-      <Table bordered condensed hover striped>
+      <Table bordered className="member-table" condensed hover striped>
         <thead>
           <tr>
-            <th>Name</th>
+            <th>Member</th>
             <th>Id</th>
+            <th>Roles</th>
             <th className="controls" />
           </tr>
         </thead>
@@ -129,10 +130,23 @@ class MembersAdmin extends React.Component {
     <tr key={user.id}>
       <td>
         <Link to={{ pathname: `/users/${user.id}` }}>
+          <img
+            className="member-image"
+            height={48}
+            src={getUserImage(user)}
+            width={48}
+          />
           {getUserName(user)}
         </Link>
       </td>
       <td>{user.id}</td>
+      <td>
+        {user.roles.map(role => (
+          <Label key={`${user.id}-${role}`}>
+            {role}
+          </Label>
+        ))}
+      </td>
       <td>
         <Button
           bsSize="xs"

@@ -13,4 +13,18 @@
   .controls {
     width: 10px;
   }
+
+  .member-table {
+    th, td {
+      vertical-align: middle;
+    }
+
+    .member-image {
+      margin-right: 10px;
+    }
+
+    .label + .label {
+      margin-left: 5px;
+    }
+  }
 }
