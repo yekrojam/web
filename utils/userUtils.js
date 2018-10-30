@@ -1,8 +1,8 @@
 // @flow
 
-import { User } from '../constants/types';
+import { Member } from '../constants/types';
 
-export function getUserImage(user: User): string {
+export function getUserImage(user: ?Member): string {
   if (!user) {
     return '';
   }
@@ -10,6 +10,13 @@ export function getUserImage(user: User): string {
   return user.imageURL || user.defaultedImageURL || '';
 }
 
-export function getUserName(user: User): string {
+export function getUserName(user: ?Member): string {
   return (user && user.name) || '';
+}
+
+/**
+ * Checks a user object to see if that user has admin privileges.
+ */
+export function isAdmin(member: ?Member) {
+  return member && member.roles && member.roles.indexOf('ADMIN') > -1;
 }

@@ -6,8 +6,7 @@ import { Link } from 'react-router-dom';
 
 import MemberImage from './MemberImage';
 
-import isAdmin from '../../utils/isAdmin';
-import { getUserName } from '../../utils/userUtils';
+import { getUserName, isAdmin } from '../../utils/userUtils';
 import { Member } from '../../constants/types';
 
 type Props = {

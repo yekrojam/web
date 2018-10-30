@@ -4,7 +4,7 @@ import React, { Fragment } from 'react';
 import { MenuItem, NavDropdown } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 
-import isAdmin from '../../utils/isAdmin';
+import { isAdmin } from '../../utils/userUtils';
 import { User } from '../../constants/types';
 
 import './styles/AccountNavItem.scss';

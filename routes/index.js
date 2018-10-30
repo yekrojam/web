@@ -7,8 +7,7 @@ import NotFound from './controllers/NotFoundController';
 import Profile from './controllers/ProfileController';
 import Settings from './controllers/SettingsController';
 
-import isAdmin from '../utils/isAdmin';
-
+import { isAdmin } from '../utils/userUtils';
 import { HOME_PATH, INDEX_PATH } from '../constants/app';
 import { Member } from '../constants/types';
 

@@ -1,9 +1,17 @@
 import { expect } from 'chai';
 
-import { getUserImage, getUserName } from '../userUtils';
+import { getUserImage, getUserName, isAdmin } from '../userUtils';
 
 const imageURL = 'http://www.example.com/user.jpg';
 const defaultedImageURL = 'https://s.gravatar.com/avatar/0db53901eca1472a8997a38a24b38d06?d=identicon&s=480';
+
+const ADMIN = {
+  roles: ['ADMIN'],
+};
+
+const NON_ADMIN = {
+  roles: ['MEMBER'],
+};
 
 describe('getUserImage', () => {
   it('returns the url string from the `user` object', () => {
@@ -36,5 +44,12 @@ describe('getUserName', () => {
 
   it('returns an empty string when there is no user object', () => {
     expect(getUserName(null)).to.equal('');
+  });
+});
+
+describe('isAdmin', () => {
+  it('checks whether a user is an admin or not', () => {
+    expect(isAdmin(ADMIN)).to.equal(true);
+    expect(isAdmin(NON_ADMIN)).to.equal(false);
   });
 });
